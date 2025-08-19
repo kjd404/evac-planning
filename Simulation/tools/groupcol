@@ -1,0 +1,262 @@
+#!/usr/bin/env python3
+import os
+import sys
+from optparse import OptionParser
+from math import *
+
+global options
+
+# collect data in globals
+min = {}
+max = {}
+argmin = {}
+argmax = {}
+sum = {}
+sum2 = {}
+sumw = {}
+sum2w = {}
+n = {}
+first = {}
+last = {}
+firstLine = {}
+lastLine = {}
+
+
+def get(line, index) :
+    if -len(line)<=index<len(line) :
+        return line[index]
+    else :
+        return ""
+
+# record the data
+def record(value, linenum, inline, tag, ignore) :
+    global min, max, argmin, argmax, sum, sum2, n, first, last, firstLine, lastLine
+
+    if (value!="") :
+        try : 
+            fvalue = float(value)
+        except ValueError :
+            if ignore : return
+            fvalue = 0
+            
+        if tag not in sum :
+            n[tag] = 1.0
+            sum[tag] = fvalue
+            sumw[tag] = fvalue
+            sum2[tag] = fvalue*fvalue
+            sum2w[tag] = fvalue*fvalue
+            max[tag] = fvalue
+            min[tag] = fvalue
+            argmax[tag] = linenum
+            argmin[tag] = linenum
+            first[tag] = last[tag] = value
+            firstLine[tag] = lastLine[tag] = inline
+        else :
+            n[tag] += 1.0
+            sum[tag] += fvalue
+            sumw[tag] += n[tag]*fvalue
+            sum2[tag] += fvalue*fvalue
+            sum2w[tag] += n[tag]*n[tag]*fvalue
+            if fvalue>max[tag] : 
+                max[tag] = fvalue
+                argmax[tag] = linenum
+            if fvalue<min[tag] : 
+                min[tag] = fvalue
+                argmin[tag] = linenum
+            last[tag] = value
+            lastLine[tag] = inline
+
+
+def main() :
+    linenum = 0
+
+    parser = OptionParser(usage='''{0} statColumn groupingColumns options
+Statistics are gathered about the information in the statColumn in each group.
+A group is a contiguous set of lines with the same value in all the groupingColumns.
+A common example: groupcol 2 2 -tL
+groups on column 2 with stat of column 2.  -t prevents group cols from being printed'''.format(os.path.basename(sys.argv[0])))
+
+    parser.add_option("-C", "--groupByColumns", action="store_true", default=False, dest="groupByColFlg", help="group by columns (all listed columns are statColumns)")
+    parser.add_option("-t", "--noTag", action="store_true", default=False, dest="noTagFlg", help="do not tag lines with grouping columns")
+    parser.add_option("-H", "--header", action="store_true", dest="labelFlg", help="header row to label columns and statistics")
+    parser.add_option("-f", "--first", action="store_true", dest="firstFlg", help="first element of a group")
+    parser.add_option("-F", "--firstLine", action="store_true", dest="firstLineFlg", help="first whole line of a group")
+    parser.add_option("-i", "--ignore", action="store_true", dest="ignoreFlg", help="ignore non-numeric elements in stat column")
+    parser.add_option("-l", "--last", action="store_true", dest="lastFlg", help="last element of a group")
+    parser.add_option("-L", "--lastLine", action="store_true", dest="lastLineFlg", help="last whole line of a group")
+    parser.add_option("-r", "--round", dest="digits", default=3, type="int",
+                      help = "digits after decimal to round numbers to", metavar="DIGITS")
+    parser.add_option("-N", "--num", action="store_true", dest="numFlg", help="num elements")
+    parser.add_option("-m", "--mean", action="store_true", dest="meanFlg", help="mean")
+    parser.add_option("-x", "--max", action="store_true", dest="maxFlg", help="max")
+    parser.add_option("--argmax", action="store_true", dest="argmaxFlg", help="argmax")
+    parser.add_option("-n", "--min", action="store_true", dest="minFlg", help="min")
+    parser.add_option("--argmin", action="store_true", dest="argminFlg", help="argmin")
+    parser.add_option("--weighted", action="store_true", dest="weightedFlg", help="weight values by order in group 1, 2, 3 etc")
+    parser.add_option("-w", "--width", action="store_true", dest="widthFlg", help="width of the group (max-min)")
+    parser.add_option("-W", "--flwidth", action="store_true", dest="flwidthFlg", help="first/last width of the group (last-first)")
+    parser.add_option("-s", "--stddev", action="store_true", dest="stddevFlg", help="unbiased (corrected sample) standard deviation")
+    parser.add_option("-S", "--sum", action="store_true", dest="sumFlg", help="sum")
+    parser.add_option("--sum2", action="store_true", dest="sum2Flg", help="sum of squares")
+    parser.add_option("--mean2", action="store_true", dest="mean2Flg", help="mean of sum of squares")
+
+    (options, cols) = parser.parse_args()
+
+#    print("options:", options)
+#    print("args:", cols)
+#    parser.print_help()
+
+    # translate column numbers to be zero based
+    newcols = []
+    for i in range(0, len(cols)) : 
+        r = cols[i].split(":")
+        if len(r)==1 :
+            newcols.append(int(cols[i])-1)
+        elif len(r)==2 :
+            for k in range(int(r[0]), int(r[1])+1) :
+                newcols.append(k-1)
+        elif len(r)==3 :
+            if int(r[2])<0 :
+                theend = int(r[1])-1
+            else:
+                theend = int(r[1])+1
+            for k in range(int(r[0]), theend, int(r[2])) :
+                newcols.append(k-1)
+        else :
+            print("ERROR(getcol): invalid range specifier:", cols[i])
+    cols = newcols
+
+    if len(cols)==0 :
+       parser.print_help();
+       exit(0)
+
+    # grouped by column
+    if options.groupByColFlg : 
+        statcols = cols[:]
+
+        for inline in sys.stdin :
+            line = inline.split()
+            linenum += 1
+
+            for k in statcols :
+                tag = k+1   # columns start with column 1
+                value = get(line, k)
+                record(value, linenum, inline, tag, options.ignoreFlg)
+
+    # grouped by tagging columns
+    else :
+        statcol = cols[0]
+        cols = cols[1:]
+
+        for inline in sys.stdin :
+            line = inline.split()
+            linenum += 1
+
+            if len(cols)==0 :
+                tag = ""
+            else :
+                tag = get(line, cols[0])
+                for i in range(1, len(cols)) :
+                    tag += " " + get(line, cols[i])
+                value = get(line, statcol)
+                record(value, linenum, inline, tag, options.ignoreFlg)
+
+    # print stats
+    if options.labelFlg :
+        if not options.noTagFlg :
+           if options.groupByColFlg : 
+               print("col ", end="") 
+           else :    
+               for c in cols :
+                   print("col{0} ".format(c+1), end="") 
+        if options.numFlg :
+            print("", "N", end="")
+        if options.meanFlg :
+            print("", "Mean", end="")
+        if options.stddevFlg :
+            print("", "Stddev", end="")
+        if options.minFlg :
+            print("", "Min", end="")
+        if options.argminFlg :
+            print("", "Argmin", end="")
+        if options.maxFlg :
+            print("", "Max", end="")
+        if options.argmaxFlg :
+            print("", "Argmax", end="")
+        if options.widthFlg :
+            print("", "Width", end="")
+        if options.flwidthFlg :
+            print("", "FLWidth", end="")
+        if options.sumFlg :
+            print("", "Sum", end="")
+        if options.sum2Flg :
+            print("", "Sum2", end="")
+        if options.mean2Flg :
+            print("", "Mean2", end="")
+        if options.firstFlg :
+            print("", "First", end="")
+        if options.lastFlg :
+            print("", "Last", end="")
+        if options.firstLineFlg :
+            print("", "FirstLine", end="")
+        if options.lastLineFlg :
+            print("", "LastLine", end="")
+        print()
+
+
+    for tag in sum :
+        if not options.noTagFlg :
+            print(tag, end="")
+        if options.numFlg :
+            print("", n[tag], end="")
+        if options.meanFlg :
+            if options.weightedFlg : 
+                print("", round(sumw[tag]/sum[tag], options.digits), end="")
+            else :
+                print("", round(sum[tag]/n[tag], options.digits), end="")
+        if options.stddevFlg :
+            if options.weightedFlg : 
+                if sum[tag]==1 : print("", None, end="")
+                else :
+                    x = (sum2w[tag] - sumw[tag]**2/sum[tag])/(sum[tag]-1)
+                    if x<0 : x = 0   # computer arithmetic errors
+                    print("", round(sqrt(x), options.digits), end="")
+            else : 
+                if n[tag]==1 : print("", None, end="")
+                else :
+                    x = (sum2[tag] - sum[tag]**2/n[tag])/(n[tag]-1)
+                    if x<0 : x = 0   # computer arithmetic errors
+                    print("", round(sqrt(x), options.digits), end="")
+        if options.minFlg :
+            print("", round(min[tag], options.digits), end="")
+        if options.argminFlg :
+            print("", argmin[tag], end="")
+        if options.maxFlg :
+            print("", round(max[tag], options.digits), end="")
+        if options.argmaxFlg :
+            print("", argmax[tag], end="")
+        if options.widthFlg :
+            print("", round(max[tag]-min[tag], options.digits), end="")
+        if options.flwidthFlg :
+            print("", round(float(last[tag])-float(first[tag]), options.digits), end="")
+        if options.sumFlg :
+            print("", round(sum[tag], options.digits), end="")
+        if options.sum2Flg :
+            print("", round(sum2[tag], options.digits), end="")
+        if options.mean2Flg :
+            print("", round(sum2[tag]/n[tag], options.digits), end="")
+        if options.firstFlg :
+            print("", first[tag], end="")
+        if options.lastFlg :
+            print("", last[tag], end="")
+        if options.firstLineFlg :
+            print("", firstLine[tag].strip(), end="")
+        if options.lastLineFlg :
+            print("", lastLine[tag].strip(), end="")
+        print()
+
+main()
+
+
+
+

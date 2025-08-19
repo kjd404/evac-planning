@@ -1,0 +1,22 @@
+// Test to check if capacity changes optimization unwarranted
+// Want to see if changing a high capacity max with strict enforcement affects
+// probabilities
+city capTest 3 2
+// ES+ sigma, hours, pop/childpop, t_size, xover, mutate
+parameters ES+ 0.1 0.3 100 100 3 0.2 0.5
+// Describe edges
+// src, dst, maxCapacity, freeflow, b, Beta, safety
+edge 0 0 500.0 0.0 0.0 0.0 0.0
+edge 1 1 500.0 0.0 0.0 0.0 0.0
+edge 2 2 500.0 0.0 0.0 0.0 1.0
+edge 0 1 500.0 0.016 4.00 0.15 0.0
+edge 1 2 500.0 0.016 4.00 0.15 0.0
+// describe nodes
+// node id, capacity, wait time, safety, x coord, y coord
+node 0 1 0.016 0.0 0.0 0.0
+node 1 1 0.016 0.0 1.0 0.0
+node 2 1 0.016 1.0 2.0 0.0
+// describe agents
+// agent start node, number of agents, number of individuals per agent
+agent 0 1000 1
+run 100 10

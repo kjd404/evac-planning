@@ -1,0 +1,80 @@
+Paper "Evolving a Real-time Evacuation for Urban Disaster Management" was
+accepted as a full paper to GECCO 2017
+
+These are the relevent reviewer comments:
+
+*** Reviewer 2
+2a. "To make the test cases more relevant the same network should be applied."
+
+    * Redesign tests for Boise network. However, some may not be fitting.
+
+2b. "Due to the similarity in the quality of the responses know the
+    computational response time is important, it is not clear whether the
+    simulation time and the running time is the same."
+
+    * Take time to clarify the difference between run and sim time.
+
+    * Keep real-time in paper, specify why we include real time instead of
+    evaluations or some other universal metric - real time (like minutes)
+    is not generally comparable, but we want to make it clear that our model
+    can be used for a real-world application.
+
+2c. "Please revised this sentence in different places: Results are shown Table
+    X. Please remove the double period in the following sentence: In the case
+    3 test the safe nodes move over one node (see Figure 9).."
+
+*** Reviewer 3
+3a. "It is probably an overstatement to talk about a "language" when that
+    language is basically a graph and agents on that graph. You can simply use
+    any simulation system or variables."
+
+    * ??
+
+3b. "And also you are dealing with a dynamic optimization problem, which
+    besides, is often approached as a multiobjective problem."
+
+    * Reference multiobjective optimization for evacuation problems paper.
+
+3c. "Dynamic route planning should have been analyzed as background, and maybe
+    compared."
+
+    * Add other, more recently found, papers on DTA (from thesis).
+
+3d. "The graph used, besides, is unrealistic and I don't see the way it would
+    scale to real world applications, which is the topic of this track. Real 
+    world would include thousands of nodes and edges, and a more complicated
+    topology. You should have at least tried to test success rate and time in
+    those cases."
+
+    * Use Boise network for dynamic tests. 
+
+3e. "Taking into account that it takes one hour in the simple case, I don't see
+    how it would approach anything manageable in a real case. Open Street Map,
+    for instance, provides several tools that yield the graph for maps."
+
+    * Investigate Open Street Map. Again, clarify sim time vs run time."
+
+3f. "Also the fact that you are talking about evaluations should impose
+    constraints on the time needed to solve the problem. When you are actually
+    evacuating a city, it's probably not possible to use one hour on planning
+    the routes, such as you should in this paper."
+
+    * Sim time vs run time clarification again.
+
+*** Reviewer 4
+4a. "Is there a typo in the eight line of the last paragraph of the Section 3?
+    "...each real in the...""
+
+4b. "Increase size of Figures 1 and 11 for better readability."
+
+4c. "Replace white background for figures 2-9 and 12."
+
+4d. "Why don't you consider self-adaptive parameters for dynamic tests?"
+
+    * Is it too late to add? Probably. Explain why we haven't, add to
+    future work?
+
+4e. "Are 10 runs enough? For statistical purposes there should be at least
+    20 runs."
+
+    * Can simply add more runs for updated experiments.

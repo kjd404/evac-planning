@@ -1,0 +1,288 @@
+%RH LaTex Macros Apr 2014
+%% query in the margin macro
+\newcommand{\query}[1]{{$\bullet$}\marginpar{%
+\vskip-\baselineskip %raise the marginpar a bit
+\raggedright\footnotesize
+%\itshape\hrule\smallskip#1\par\smallskip\hrule}}
+\itshape\hrule\smallskip\parbox{.75in}{{$\bullet$} #1}\par\smallskip\hrule}}
+\newcommand{\removequeries}{\renewcommand{\query}[1]{}}
+
+%% web related requires: hyperref package
+\newcommand{\webref}[2]{\href{#1}{\underline{#2}}}
+\newcommand{\web}[1]{\webref{#1}{#1}}
+
+%
+% alphalist:  a), b), ...
+%
+\newcounter{alphanum}
+\newenvironment{alphalist}{\begin{list}{\alph{alphanum})}
+        {\usecounter{alphanum}\setlength{\leftmargin}{1.5em}}
+        \rm}{\end{list}}
+
+%% Grammar specific commands
+\newcommand{\emptystring}{{\Large \tsym{\epsilon}}~}
+\newcommand{\production}{\item}
+\newcommand{\arr}{$\rightarrow$~}    %% arrow
+\newcommand{\key}[1]{{\sffamily\bfseries #1}}  %% keyword
+\newcommand{\tok}[1]{{\scshape\bfseries #1}}  %% token returned such as number
+\newcommand{\non}[1]{{\it #1}}       %% nonterm
+\newcommand{\sep}{~$\mid$~~}     %% alternation
+\newcommand{\tsym}[1]{$\boldsymbol{#1}$}  %% token returned such as number
+
+%% Walsh and Bit specific
+%\newcommand{\contreq}[3]{#3 = {\cal C} (#1, #2)}
+%\newcommand{\contr}[2]{{\cal C} (#1, #2)}
+%\newcommand{\widevec}[1]{\overrightarrow{#1}}  too big and ugly
+%\newcommand{\wt}{T}
+\DeclareMathOperator*{\acos}{acos}
+\DeclareMathOperator*{\asin}{asin}
+\DeclareMathOperator*{\atan}{atan}
+\DeclareMathOperator*{\argmax}{\arg\!\max}
+\DeclareMathOperator*{\argmin}{\arg\!\min}
+\DeclareMathOperator*{\bc}{bc}
+\DeclareMathOperator*{\degray}{degray}
+\DeclareMathOperator*{\deungray}{deungray}
+\DeclareMathOperator*{\dimof}{dim}  % \dim is already defined
+\DeclareMathOperator*{\extract}{extract}
+\DeclareMathOperator*{\fitness}{fitness}
+\DeclareMathOperator*{\gray}{gray}
+\DeclareMathOperator*{\maxdim}{maxdim}
+\DeclareMathOperator*{\pack}{pack}
+\DeclareMathOperator*{\parity}{parity}
+\DeclareMathOperator*{\pred}{pred}
+\DeclareMathOperator*{\ungray}{ungray}
+\DeclareMathOperator*{\unpack}{unpack}
+\newcommand\degrees[1]{\ensuremath{#1^\circ}}
+\newcommand{\betterthan}{\succ}
+\newcommand{\binary}[1]{\mbox{\tt #1$_2$}}
+\newcommand{\bits}[1]{\mbox{\tt #1}}
+\newcommand{\bspace}{{\cal B}}
+\newcommand{\chisq}{\mbox{$\chi^2$}}
+\newcommand{\contains}{\supseteq}
+\newcommand{\coversnot}{\not\supseteq}
+\newcommand{\covers}{\supseteq}
+\newcommand{\domain}{{\cal D}}
+\newcommand{\dspace}{{\cal D}}
+\newcommand{\embed}[2]{{\cal E} (#1, #2)}
+\newcommand{\fhat}{\widehat{f}}
+\newcommand{\forallsp}{\tnygap\forall~~}
+\newcommand{\func}[1]{\mbox{\sl #1}}
+\newcommand{\ghat}{\widehat{g}}
+\newcommand{\given}{\,|\,}
+\newcommand{\hhat}{\widehat{h}}
+\newcommand{\isin}{\subseteq}
+\newcommand{\isnotin}{\not\subseteq}
+\newcommand{\logand}{\wedge}
+\newcommand{\logiff}{\leftrightarrow}
+\newcommand{\logimp}{\rightarrow}
+\newcommand{\loglshift}{\stackrel{\mbox{\tiny shift}}{\longleftarrow}}
+\newcommand{\logminus}{-}
+\newcommand{\logeq}{=}
+\newcommand{\lognand}{\uparrow}
+\newcommand{\lognor}{\downarrow}
+\newcommand{\logneg}{\sim\!\!}
+\newcommand{\lognot}[1]{\overline{#1}}
+\newcommand{\logor}{\vee}
+\newcommand{\logpk}{\vdash}
+\newcommand{\logrshift}{\stackrel{\mbox{\tiny shift}}{\longrightarrow}}
+\newcommand{\logunpk}{\dashv}
+\newcommand{\logxor}{\oplus}
+\newcommand{\ones}{\vec{\tt 1}}
+\newcommand{\pbits}[1]{{{\tt #1}'s}}
+% \newcommand{\smallbc}{\mbox{\scriptsize\sl bc}}
+% \newcommand{\smallpack}{\mbox{\scriptsize\sl pack}}
+% \newcommand{\smallparity}{\mbox{\scriptsize\sl parity}}
+\newcommand{\smallpm}{\raisebox{.3ex}{$\scriptstyle \pm$}}
+% \newcommand{\smallunpack}{\mbox{\scriptsize\sl unpack}}
+% \newcommand{\smbc}{\mbox{\scriptsize\sl bc}}
+% \newcommand{\smpack}{\mbox{\scriptsize\sl pack}}
+% \newcommand{\smparity}{\mbox{\scriptsize\sl parity}}
+% \newcommand{\smpm}{\raisebox{.3ex}{$\scriptstyle \pm$}}
+% \newcommand{\smunpack}{\mbox{\scriptsize\sl unpack}}
+\newcommand{\strictcontains}{\supset}
+\newcommand{\trm}[2]{\walsh_{#2}(#1)w_{#2}}
+\newcommand{\unembed}[2]{{\cal C} (#1, #2)}
+\newcommand{\vose}{\phi}
+\newcommand{\walsh}{\psi}
+\newcommand{\wcsum}{\wc_{sum}}
+\newcommand{\wc}{{\cal K}}
+\newcommand{\worsethan}{\prec}
+\newcommand{\wt}{\mathcal{W}}
+\newcommand{\yspace}{{\cal Y}}
+\newcommand{\zeros}{\vec{\tt 0}}
+
+\newcommand{\wfrac}{\frac{1}{2^L}}
+\newcommand{\sumhp}[3]{\sum_{{#1}\elemof h_{#2, #3}}}
+\newcommand{\sumbitlen}[1]{\sum_{{#1}=0}^{L-1}}
+\newcommand{\sumlen}[1]{\sum_{{#1}=0}^{2^L-1}}
+\newcommand{\sumsize}[1]{\sum_{{#1}=0}^{2^L-1}}  % don't use this anymore
+\newcommand{\prodlen}[1]{\prod_{{#1}=0}^{L-1}}
+\newcommand{\invpow}[1]{\inv{2^#1}}
+
+%% Math
+% \newcommand{\openm}{\vspace*{-.06in}\begin{equation}}
+% \newcommand{\closem}{\vspace*{-.04in}\end{equation}}
+% \newcommand{\openm}{$\displaystyle}
+% \newcommand{\closem}{$}
+\renewcommand{\emptyset}{\varnothing}
+\newcommand{\onetoone}{$1\!\!-\!1$}
+\newcommand{\reals}{\mathbb{R}}
+\newcommand{\integers}{\mathbb{I}}
+\newcommand{\posintegers}{\mathbb{Z}}
+\newcommand{\modintegers}[1]{{{\posintegers}_{#1}}}
+
+% logical operators in text form
+\newcommand{\ortxt}{{\sc or}}
+\newcommand{\andtxt}{{\sc and}}
+\newcommand{\nottxt}{{\sc not}}
+\newcommand{\xortxt}{{\sc exclusive-or}}
+\newcommand{\Xortxt}{{\sc Exclusive-or}}
+\newcommand{\truetxt}{{\sc true}}
+\newcommand{\falsetxt}{{\sc false}}
+
+\newcommand{\NP}{\mbox{NP}}
+\newcommand{\infinity}{\infty}
+
+\newcommand{\avg}[1]{\langle #1 \rangle}
+\newcommand{\ceil}[1]{{\lceil #1 \rceil}}
+% \newcommand{\comb}[2]{{\binomal{#1}{#2}}}
+\newcommand{\comb}[2]{{#1\choose#2}}
+\newcommand{\conv}{\circ}
+\newcommand{\cross}{\!\times\!}
+\newcommand{\dotprod}{\cdot}
+\newcommand{\ds}{\displaystyle}
+\newcommand{\elemof}{\in\,}
+\newcommand{\notelemof}{\not\in\,}
+\newcommand{\floor}[1]{{\lfloor #1 \rfloor}}
+\newcommand{\intersect}{\cap}
+\newcommand{\bigintersect}{\bigcap}
+\newcommand{\inv}[1]{\frac{1}{#1}}
+\newcommand{\mapto}{{\rightarrow}\,}
+% \newcommand{\mod}{\bmod}
+\newcommand{\order}[1]{{\cal{O}}(#1)}
+\newcommand{\rounddown}[2]{{\lfloor #1 \rfloor \raisebox{-1.0ex}{\scriptsize $#2$}}}
+\newcommand{\rspace}{{\cal R}}
+\newcommand{\achspace}{{\cal H}}
+\newcommand{\smtxt}[1]{{\scriptstyle\rm #1}}
+\newcommand{\st}{\,:\,}
+\newcommand{\sttxt}{~~~s.t.~~~}
+\newcommand{\subsetof}{\subseteq}
+\newcommand{\suchthat}{~:~}
+\newcommand{\supermath}[1]{\raisebox{2ex}{$\scriptscriptstyle #1$}}
+% \newcommand{\therefore}{.\!\!\cdot\!\!.}
+\newcommand{\transpose}[1]{{#1}^{\scriptscriptstyle \sf T}}
+\newcommand{\transposep}[1]{{(#1)}^{\scriptscriptstyle \sf T}}
+\newcommand{\sminv}{\raisebox{.5ex}{\Large $-1$}}
+\newcommand{\smtranspose}{\raisebox{.5ex}{\large\sf T}}
+\newcommand{\txt}[1]{\mbox{~~#1~~}}
+\newcommand{\tx}[1]{\mbox{#1}}
+\newcommand{\ul}[1]{\underline{#1}}
+\newcommand{\union}{\cup}
+\newcommand{\bigunion}{\bigcup}
+
+%% Sections
+%Theorems
+\newcounter{theoremnum}
+\newcommand{\theorem}[1]{{\refstepcounter{theoremnum}\vspace*{.05in}\noindent\bfseries \underline{Theorem} \thetheoremnum\ } (#1) \index{#1 Theorem}\index{Theorems!#1}
+\itshape
+}
+
+% theorem proving support
+\newcommand{\case}[1]{\vspace*{.05in}\noindent{\bfseries\upshape CASE\ #1:}}
+\newcommand{\numcase}[1]{\vspace*{.05in}\noindent{\bfseries\upshape CASE\ #1:}}
+\newcommand{\numexample}[1]{\vspace*{.05in}\noindent{\bfseries\upshape EXAMPLE\ #1:}}
+\newcommand{\derivation}{\vspace*{.05in}\noindent{\bfseries\upshape Derivation: }}
+\newcommand{\theoremend}{\upshape}
+% \newcommand{\proof}{\upshape \vspace*{-.05in}\noindent{\bfseries Proof: }}
+\renewcommand{\qedsymbol}{\upshape \hspace*{0.9\columnwidth} $\Box$\hspace*{-1ex}\raisebox{.5ex}{$\Box$}}
+\newcommand{\diamondqed}{\hspace*{0.9\columnwidth} $\Diamond$}
+\newcommand{\blackqed}{$\blacksquare$}
+
+%Lemmas
+\newcounter{lemmanum}
+\newcommand{\lemma}{{\refstepcounter{lemmanum}\vspace*{.05in}\noindent\bfseries \underline{Lemma} \thelemmanum\ }
+\itshape}
+
+% Conjectures
+\newcounter{conjecturenum}
+\newcommand{\conjecturenonum}{{\refstepcounter{conjecturenum}\vspace*{.05in}\noindent\bfseries \underline{Conjecture}\ }}
+\newcommand{\conjecture}{{\refstepcounter{conjecturenum}\vspace*{.05in}\noindent\bfseries \underline{Conjecture} \theconjecturenum\ }
+\itshape}
+
+% Corollaries
+\newcounter{corollarynum}[theoremnum]
+\newcommand{\corollarynonum}{{\refstepcounter{corollarynum}\vspace*{.05in}\noindent\bfseries \underline{Corollary}\ }}
+\newcommand{\corollary}{\refstepcounter{corollarynum}\vspace*{.05in}\noindent{\bfseries \underline{Corollary} \thetheoremnum \alph{corollarynum}\ }
+\itshape}
+\newcommand{\lastcorollarynum}{\thetheoremnum \alph{corollarynum}}
+
+\newcommand{\namedcorollary}[1]{{\refstepcounter{corollarynum}\vspace*{.05in}\noindent\bfseries \underline{Corollary} \thetheoremnum \alph{corollarynum}\ } (#1) \index{#1 Corollary}\index{Corollarys!#1}}
+
+
+% Observations
+\newcommand{\observations}{\noindent{\bfseries Observations: }}
+
+% Examples
+\newenvironment{example}{\begin{quote}{\bf Example:~}}{\end{quote}}
+
+%% General
+\newcommand{\note}[1]{{\large\bfseries Note: #1}}
+%\newcommand{\note}[1]{\fbox{\ #1\ }}
+\newcommand{\abeam}[1]{\rule{#1}{0.0in}}
+\newcommand{\citehere}{\fbox{\ add cite here\ }}
+\newcommand{\defit}[1]{{\bfseries #1\/}\index{#1}}
+\newcommand{\downstrut}[1]{\rule[-#1]{0pt}{#1}}
+\newcommand{\upstrut}[1]{\rule{0.0in}{#1}}
+\newcommand{\hr}{\noindent\rule{\columnwidth}{0.1\baselineskip}\\}
+\newcommand{\indexit}[1]{{#1}\index{#1}}
+\newcommand{\numnd}[1]{{$ #1^{nd} $}}
+\newcommand{\numrd}[1]{{$ #1^{rd} $}}
+\newcommand{\numst}[1]{{$ #1^{st} $}}
+\newcommand{\numth}[1]{{$ #1^\textrm{th} $}}
+
+\newcommand{\neggap}{\hspace*{-2ex}}
+\newcommand{\exgap}{\hspace*{1ex}}
+\newcommand{\tnygap}{\hspace*{.125in}}
+\newcommand{\smgap}{\hspace*{.25in}}
+\newcommand{\gap}{\hspace*{.5in}}
+\newcommand{\lggap}{\hspace*{1.0in}}
+\newcommand{\hugegap}{\hspace*{2.0in}}
+
+\newcommand{\negvgap}{\vspace*{-2ex}}
+\newcommand{\tnyvgap}{\vspace*{1ex}}
+\newcommand{\smvgap}{\vspace*{2ex}}
+\newcommand{\vgap}{\vspace*{4ex}}
+\newcommand{\lgvgap}{\vspace*{8ex}}
+\newcommand{\hugevgap}{\vspace*{16ex}}
+
+%% Cheap Slide making
+%\newcommand{\graphic}[2]{\fbox{\rule{0.0in}{#1}\large\rm {\bfseries #2 }}}
+%\newcommand{\graphic}[2]{\framebox[0.99\textwidth]{\rule{0.0in}{#1}\large\rm {\bfseries #2 }}}
+%\newcommand{\graphic}[2]{{\rule{0.0in}{#1}\large\rm {\bfseries #2 }}}
+%\newcommand{\help}[1]{{\large\rm {\bfseries [} #1{\bfseries ]} }}
+
+
+
+\newcommand{\graphic}[2]{\makebox[0.99\textwidth]{\rule{0.0in}{#1}\large\rm {\bfseries #2 }}}
+\newcommand{\defhead}[1]{{\huge\sf \underline{#1}~}}
+\newcommand{\newslide}{\clearpage\Huge\sf}
+\newcommand{\slidehead}[1]{\clearpage{\Huge\sf \underline{#1}{\vspace*{.2in}}}}
+\newcommand{\slideheadextra}[1]{{\vspace*{-.2in}}{\Huge\sf \underline{#1}}}
+\newcommand{\slidesub}[1]{{\huge\sf #1{\vspace*{.1in}}}}
+\newcommand{\say}[1]{{}}
+\newcommand{\slidenote}[1]{}
+\newcommand{\smbits}[1]{\mbox{\large\tt #1}}
+\newcommand{\subhead}[1]{{\vspace*{.1in}\Huge\sf #1{\vspace*{.05in}}}}
+\newcommand{\titlepagebox}[1]{\clearpage{\Huge\bfseries\sf
+\vspace*{.38\textheight}
+\setlength{\fboxrule}{2pt}\setlength{\fboxsep}{5pt}
+\centerline{\fbox{\usefont{OT1}{lcmss}{m}{n}\fontsize{30pt}{36pt}\selectfont #1}}}}
+
+% example of common parameters
+% \textwidth=7.5in
+% \textheight=9in
+% \columnsep=.25in
+% \oddsidemargin=0in
+% \topmargin=-.5in
+% \pagestyle{empty}
+% \pagestyle{plain}

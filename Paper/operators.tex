@@ -1,0 +1,47 @@
+\subsection{Operators}
+\subsubsection{Selection}
+Selection is performed using classic tournament selection, with
+a tournament of size three. Three random individuals are selected
+from the population and from those three the one with the highest
+fitness is selected. Tournament selection helps prevent convergence
+on local optima.
+\subsubsection{Mutation}
+Mutation is performed by selecting node probabilities to be mutated
+with a $50\%$ chance. For any node selected, a random edge-probability
+is chosen to be mutated by adding a random, normally distributed value,
+with a standard deviation of $\sigma$, typically equal to $0.1$. Once
+the value is added, all probabilities for the selected node are
+re-normalized. Typically, mutation probability was set to $0.5$.
+\subsubsection{Crossover} While crossover is not typically used
+in evolution strategies, we felt it could help more quickly converge
+on good solutions, especially combined with the $+$ operator.
+Individuals are selected for crossover using tournament selection and
+elitism. The selected individual and individual with the highest fitness
+are used. 
+Crossover is performed by iterating over the set of nodes and choosing,
+with a $50\%$ chance, node probabilities to swap between the parents.
+This crossover produces two new individuals. Typically, crossover
+probability was set to $0.2$. 
+
+\subsection{Experiment Comparison to Bazzan}
+In \cite{bazzan2014evolutionary}, Bazzan et al. evolve traffic
+assignments for paths discovered using the $k$-shortest paths
+algorithm, with different values of $k$. Here we compare their results
+with ours on the same problem, using our model. The significant
+difference between our work and theirs is the use of $k$-shortest
+paths to discover the fastest routes. We evolve traffic distributions
+for each node. In their work they use origin-destination (OD) pairs from
+two nodes, to two other nodes, creating four total OD pairs. For each OD
+pair $k$ paths are discovered with $k$-shortest paths, and then assignments
+are evolved. For consistency, we model the same graph by starting all
+traffic at the origins they use, and assigning a safety of $1.0$ to each
+destination, letting our model evolve traffic assignments through probabilities.
+The results are compared below.
+RESULTS
+Our model has a longer average travel time than the results reported in
+\cite{bazzan2014evolutionary}. We believe this is a result of starting
+all the vehicles moving at the same time, in our model. However, we feel
+our results are reasonable comparable, while offering a more robust model,
+regarding dynamic events.
+
+

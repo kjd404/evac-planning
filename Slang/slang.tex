@@ -1,0 +1,201 @@
+\documentclass[11pt]{article}
+\usepackage{amscd}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{array}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{latexsym}
+\usepackage{multicol}
+\usepackage{multirow}
+\usepackage{rotating}
+\usepackage{subfigure}
+\usepackage{ulem}
+\usepackage{verbatim}
+\input{macros.tex}
+
+\parskip=.9ex
+\textwidth=7.0in
+\textheight=9.0in
+\oddsidemargin=-.25in
+%\oddsidemargin=0in
+\topmargin=-.75in
+
+\renewcommand{\arraystretch}{1.2}
+\begin{document}
+
+\title{SLang}
+\author{Robert B. Heckendorn
+  \and
+Damian Ball 
+  \and 
+updated by Keith Drew}
+\maketitle
+
+The command language for the simulator is called \textbf{slang}.  Here is the
+syntax and semantics (recovered from Damian's thesis, updated by Keith):
+
+\begin{enumerate}
+\production \non{program} \arr \non{command-list}
+
+\production \non{command-list} \arr \non{command-list} \non{command} \sep \non{command}
+
+\production \non{command} \arr \non{exit} \sep \non{hi} \sep \non{city} \sep \non{edge} \sep \non{agent} \sep  \non{rmedge} \sep \non{run} \sep \non{show} \sep \non{safety} \sep \non{node}
+
+\production \non{exit} \arr \key{exit} \sep \key{quit}
+
+Quits the program.
+
+\production \non{hi} \arr \key{hi}
+
+Prints ``Howdy!'' as a test that the program is ``awake'' and ``listening'' to command input.
+
+\production \non{city} \arr \key{city} \tok{STRING} \tok{INT} \tok{INT}
+
+Creates a city object with:
+\begin{itemize}
+\item the title given by the string 
+\item fixed number, $N$, of nodes numbered $1$ to $N$
+\item maximum out degree for any of the nodes so pointers the edges adjacent to the node can be
+allocated once and have to manage variable length lists in this speed critical function.
+\end{itemize}
+
+\production \non{edge} \arr \key{edge} \tok{INT} \tok{INT} \tok{FLOAT} \tok{FLOAT} \tok{FLOAT} \tok{FLOAT} \tok{FLOAT}\\
+
+
+This adds an edge in the current city.   The edge is identified by (from node, to node, order of entry).  The time spent by a car on an edge is determined by the
+parameters given for each edge.   The time is:
+\[
+\textrm{time} = \mathcal{F} \left( 1 + b \left(\frac{c}{c_{max}}\right)^\beta \right)
+\]
+where $c$ is the amount of traffic on the edge, $c_{max}$ is the capacity,
+$\mathcal{F}$ is the free flow time, b and $\beta$ are constants.
+The parameters in order are the following.   If parameters are not given it defaults to the last used value for that positional parameter (not true for updated version - parameters must be present in SLANG file).
+\begin{itemize}
+\item From node number
+\item To node number
+\item $c_{max}$: Capacity as the number of cars per unit time for the road.  Used in the link cost formulas.
+\item $\mathcal{F}$: Free flow travel time, the amount of unit time that it takes a car to travel the length of the edge under ideal conditions
+\item $b$: coefficient in the link cost formulas, also commonly named $\alpha$
+\item $\beta$: power or exponent in the link cost formulas
+\item The last value specified is the safety value of the specified edge, typically ranging from $0-1$.
+
+%\item Length of the road in whatever units you want.  \textbf{Not currently} needed for our optimizations.
+%\item Speed limit.  \textbf{Not currently} needed for our optimizations.
+%\item Cost to travel a link.  \textbf{Not currently} needed for our optimizations.
+% \item Type of link/zone.  \textbf{Not currently} needed for our optimizations.
+\end{itemize}
+
+\production \non{rmedge} \arr \key{rmedge} \tok{INT} \tok{INT} \sep \\
+\smgap  \key{rmedge} \tok{INT} \tok{INT} \tok{INT}
+
+Deletes the edge identified by the from and to node numbers or the from and to node numbers plus
+the order in which they were added.
+
+\production \non{node} \arr \key{node} \tok{INT} \tok{INT} \tok{FLOAT} \tok{FLOAT} \tok{FLOAT} \tok{FLOAT}
+
+Specifies node parameters for the node indicated with the following parameters:
+\begin{itemize}
+	\item Node ID
+	\item Node capacity
+	\item Agent wait time for node - the time that an agent will wait at the node before being re-evaluated (in unit time)
+	\item The safety of the given node
+	\item The node longitude
+	\item The node latitude
+\end{itemize}
+
+\production \non{agent} \arr \key{agent} \tok{INT} \tok{INT} \tok{INT}
+
+Specifies simulation agents with the following parameters:
+\begin{itemize}
+	\item The starting node of the agent in each simulation (evaluation).
+	\item The number of agents to start at the specified node.
+	\item The number of individuals in the agent group.
+\end{itemize}
+
+\production \non{probabilities} \arr \key{probabilities} \tok{STRING}
+
+STRING specifies a file to read for a population of probability sets that should be used to initialize the population before running a new evolution.
+
+\production \non{anyint} \arr \tok{INT} \sep \key{*}
+
+%\production \non{od} \arr \key{od} \non{anyint} \non{anyint}  \tok{FLOAT} \tok{FLOAT}
+
+
+%\begin{itemize}
+%\item The first two arguments are the From and To nodes.  They could also be \key{*}'s which
+%indicate for all nodes in that position.   e.g.  od * 17 3.14 2.78 means for all nodes going to
+%node 17 the values of mean and standard deviation are 3.14 and 2.78 respectively.
+%\item Mean number of cars per hour generated going from the From node to the To node.
+%The mean is really a proportion.   
+%\item Standard Deviation of the cars per hour.
+%\end{itemize}
+%The default value is no cars are generated going between any pair of nodes.
+%Any values assigned for cars going from a node to itself will not be used in generating car schedules.
+%Values of already defined OD pairs may be changed by just specifying the same OD pair 
+%and the new values.
+%For instance all the OD pairs could be set to a base value and then some OD pairs of interest
+%could be set to zero or to a higher value afterward.
+
+
+\production \non{run} \arr \key{run} \tok{INT} \tok{INT} \tok{INT}
+
+Initialize the simulation and run the simulation and learning.   The parameters are:
+\begin{itemize}
+\item Total number of evolution generations.
+\item The number of time steps between reporting progress. Must evenly divide simulation steps.
+\item The number of runs of the whole optimization, restarting each time.
+\end{itemize}
+
+\production \non{simulate} \arr \key{simulate} \tok{STRING}
+
+STRING specifies a file with probabilities that should be run through the traffic simulation. This is used to evaluate fitness of a human-written set of probabilities. Use for testing simple cases to prove the fitness function works, and to prove the model can solve simple problems. 
+
+\production \non{slang} \arr \key{slang} \tok{STRING}
+
+Command to output a SLang file based on the current city topology. STRING designates the filename to write the SLang file to.
+
+%\production \sout{\non{go} \arr \key{go} \tok{INT} \tok{INT} \sep \key{go} \tok{INT} \sep \key{go}}
+
+%Run the simulation using the default parameters from the last \key{run} or \key{go} command.
+
+%\production \sout{\non{eval} \arr \key{eval} TBD...}
+
+%Evaluate the performance of cars running the learned pheromone tables.
+%This runs the simulation collecting statistics on
+%performance without altering the solution to the optimization.
+
+%\production \non{show} \arr \non{city} \sep \non{edges} \sep \non{topology} \sep \non{od} \sep \non{pheromones} \sep \non{dotformat} \sep \non{edgeload} \sep \non{heatmap} \sep \non{allpaths}
+\production \non{show} \arr \non{edges} \sep \non{topology} \sep \non{probabilities} \sep \non{drawable} \sep \non{parameters}
+
+Output commands show edges, city topology, and probabilities. The drawable command outputs the city topology information needed to create a visual representation of the graph. Parameters refer to the evolution parameters (generations, sigma, population size, etc)
+
+%\production \non{show city} \arr \key{show city}
+
+\production \non{show edges} \arr \key{show edges}
+
+\production \non{show topology} \arr \key{show topology}
+
+%\production \non{show od} \arr \key{show od}
+
+%\production \non{show pheromones} \arr \key{show pheromones} \tok{INT}
+\production \non{show probabilities} \arr \key{show probabilities}
+
+\production \non{show drawable} \arr \key{show drawable}
+
+%\production \non{show dotformat} \arr \key{show dot} \tok{INT}
+
+%\production \non{show edgeload} \arr \key{show edgeload}
+
+%\production \non{show heatmap} \arr \key{show heatmap}
+
+%\production \non{show allpaths} \arr \key{show allpaths}
+\bigskip
+\bigskip
+
+\textbf{\LARGE{NOTE:}} The grammar rules here indicate the theoretical requirements of the grammar. Rules may need to change depending on implementation and optimization algorithm. SLang was created with Ant-Colony Optimization in mind, and has been repurposed here for use with an Evolution Strategy used to optimize a cloud of traffic-assignment probabilities. 
+
+\end{enumerate}
+\end{document}

@@ -1,0 +1,88 @@
+\section{Experiments}
+Numerous experiments were carried out during development to test the software and ensure the model works as proposed. The experiments of concern here are those related to showing the ability of the model to handle dynamic environments and those used for comparison to other work.
+
+
+zzzSubjecttoChangezzz
+The experiments performed include (1) an experiment to show our model handles changes in topology quickly and accurately; (2) an experiment to show our model handles changes in safety functions quickly and accurately; (3) an experiment to show our model handles changes in agent distribution quickly and accurately; (4) an recreation of the experiment(s) performed in \cite{lu2004capacity}, for the sake of comparison; (5) a recreation of the experiment(s) performed in \cite{bazzan2014evolutionary}, for the sake of comparison.
+\subsection{Validation Tests}
+To validate our model we needed to test that capacity and freeflow constraints effected our results. To do this we created a simple test with a 5x5 grid, with all edge and node variables equal, and agents initialized to begin in the top left corner of the grid, while safety was only in the bottom right of the grid. After recording the path to safety indicated by highest probabilities, we modify the freeflow values for one test and the capacity for another test. In the case of both tests, we encourage discovery of the same path, but in the first case we do that by greatly reducing the freeflow time of the edges along the selected path, while increasing freeflow along every other edge in the graph, in hopes that the designated path is found by our model. To test capacity constraints, we greatly increase maximum capacity along the selected path, while decreasing maximum capacity along all other edges, in hopes that the designated path is discovered by our model. The following image indicates the indicated path, which was discovered in both cases. Data indicating time to discover from random initialization is included.
+
+First, the results from the baseline test indicates the route most often converged upon by our model. The vehicle traffic flows from along the indicated route: 0, 5, 10, 15, 20, 21, 22, 23, 24.
+
+\includegraphics[width=\linewidth]{maze_default_solution.png}
+
+Next, for freeflow validation, we describe a path through the grid that has a freeflow time of INSERT TIME USED HERE across all edges of the path and in the direction of safety and uses freeflow time of INSERT TIME HERE for all other edges. The path discovered is the designated path: 0, 1, 2, 3, 8, 13, 12, 11, 10, 15, 20, 21, 22, 23, 24.
+
+\includegraphics[width=\linewidth]{maze_two_flow_cap.png}
+
+Nexts, the same path is designated for capacity testing, and the results are similar. A maximum capacity of INSERT CAPACITY USED HERE is used for all edges along the path, while a maximum capacity of INSERT CAPACITY USED HERE is used for all other edges in the grid. The designated path is discovered again by our model: 0, 1, 2, 3, 8, 13, 12, 11, 10, 15, 20, 21, 22, 23, 24.
+
+\subsection{Comparison}
+Here we compare our results to results of other tests suited to our model in the literature. Specifically, we are concerned with the work of Lu \cite{lu2004capacity} and Bazzan \cite{bazzan2014evolutionary}. In \cite{lu2004capacity}, an interesting topology is presented to test whether or not their model, under capacity constraints, can move vehicles to the safe locations. We recreated their problem using our SLang grammar, and performed the test.
+
+RESULTS
+
+Next, we compared use a problem described in \cite{bazzan2014evolutionary}. Their model seeks to minimize average travel time by evolving a path from through a graph, given a set of vehicles, OD pairs for those vehicles, and a set of $k$ shortest paths. They use the graph from \cite{willumson2001transport}, and with the freeflow times specified in it. The way we model capacity is different, but comparable.
+
+For their experiment they run four OD pairs, so to compare we run our experiment with two vehicle origin nodes, corresponding to their origins, with two safety zones, corresponding to their destinations. We let our model optimize for safety, and provide the results and comparison below.
+
+RESULTS AND GRAPH
+\subsubsection{Notes on these comparisons}
+We probably don't need the first comparison - that doesn't really serve as useful for context. However, the second one is pretty good for comparison's sake.
+
+The real issue with the comparison is data - the values in their results are not necessarily values that can be compared to anything we have directly. They measure average time for each of the k shortest paths they test. Our code needs to be altered a little to get this value, not really a big deal. We can also make some accommodations for this test in particular, which will result in faster running times. Another useful comparison is the number of unique paths our agents take. If we end up generating all or a subset of the k shortest paths used by their model, we might be able to claim, via Wardrop's principles, that our model is better.
+
+
+\subsection{Changes}
+Here we describe several experiments carried out in similar fasion that test if our model accommodates dynamic events during an evacuation. We hypothesize that if traffic assignment probability distributions are optimized in advance, they can be used to initialize a population for the evolution strategy used by our model and doing so will significantly reduce optimization time, both in real time, and number of generations without loss of accuracy.
+
+For these experiments we make several assumptions. First, we assume changes are not significantly large. We posit that some pre-computed solutions adapting to changes will be dealing with the smallest changes possible for optimization. If a significantly large change in any characteristic we are investing occurs, in a fashion too fast to re-optimize solutions for at smaller intervals, re-optimization may not perform better than optimization from a random restart. In fact, and perhaps a matter of future investigation, in such a case where the graph characteristics have been changed significantly, re-optimization using a previous solution may take longer than from random noise, due to having to ``undo'' information learned by the solution in previous optimizations.
+
+The events we are concerned with here involve changes in topology, safety zones, capacity, and vehicle distribution. To test our hypothesis, we perform two initial optimizations (1) we optimize a population of solutions that are initialized with random values for the initial graph configuration and (2) we optimize a population of solutions that are initialized with random values for the graph configuration after some change in topology, safety, capacity, or vehicle distribution has been modified. Finally, we use the final population from the first optimization to initialize the starting population used to optimize the second graph configuration. Results are tabled below.
+
+To test capacity, safety, and vehicle distribution changes we use the same set of nodes and edges, only modifying the characteristic being tested. The graphs, $G_1$ and $G_2$, are pre and post change graphs, respectively. In each experiment, $G_1$ and $G_2$ are optimized using a population of randomly initialized solutions. The time to finish optimization is recorded as the number of evaluations performed before fitness reaches a maximum ($1.0$), on average. Each experiment then optimzies $G_2$ again, using the population of solutions found while optimizing $G_1$. We predict a significantly reduced number of ealuations will be performed to reach a fitness maximum when using a pre-optimized set of solutions.
+To test adaptability to changes in topology the same method is used, but with different topologies for $G_1$ and $G_2$. The topologies are changed to ensure the change in topology used to test adaptability will required an adaption of the solutions.
+
+For the capacity tests, the graph initializes vehicles in nodes \{0,1,2,3,4\}, with $100$ vehicles per node, for a total of 500. Safety is found, at a value of $1.0$ in both $G_1$ and $G_2$ at node \{24\}. Capacity of all edges is set to 200 in $G_1$ and 100 in $G_2$.
+
+For the safety test $G_1$ and $G_2$ are initialized with $1000$ vehicles in node \{0\}. Teh safety in $G_1$ is a plateau of four nodes, \{18,19,23,24\}, which move to \{17,18,22,23\} in $G_2$. Each node in the safety zone has a safety rating of $1.0$ in both $G_1$ and $G_2$.
+
+For the topology test vehicles are initialized in nodes \{5,15\}, with $1000$ vehicles each, in both $G_1$ and $G_2$. Both $G_1$ and $G_2$ have safety zones, with safety $1.0$, in nodes \{4,9,14,19,24\}. The edges creating a ``bridge'' in $G_1$, between nodes \{11, 12\} are removed in $G_2$.
+
+For the vehicle distribution test $G_1$ initializes vehicles in nodes \{0, 1\}, while $G_2$ initilizes the vehicles in \{3, 4\}. Both $G_1$ and $G_2$ start with $1000$ vehicles in each starting node. Safety is found in node \{24\}, with a value of $1.0$.
+
+%To test our hypothesis for each type of event, we created unique experiments for each. Here are descriptions and graphs for each.
+%
+%To test if a change in capacity was easily adapted from pre-computed solutions, we use use a graph with 25 nodes in the form of a 5x5 grid. The graph is connected as pictured in FIGURE REF. The edges in the graph all carry a maximum capacity of 1000 vehicles per hour. For the change in capacity, the second graph is identical in all things except that maximum capacity is dropped to 500 vehicles per hour. Finally, the solution found when capacity was at 1000 vehicles per hour is used to optimize the graph with maximum capacity of 500 vehicles per hour. We predict a significantly faster optimization time when using the initial optimized solution population to seed optimization in the second graph.
+%
+%To test if a change in safety was easily adapted from pre-computed solutions we used a simple graph, with a safety plateau in one region of the graph. All edges and nodes in the graph carry equal values, except for the safety plateau. For the first and second optimizations, the safety area is shifted by half of its area through the graph, to represent a moving event, as opposed to a completely new event. Our hypothesis suggests similar optimization times for these two cases.
+%Next, the second graph is optimized using solutions from the first graph's optimization. Our hypothesis predicts a significant reduction in optimization time for this experiment.
+%
+%To test the hypothesis regarding a change in topology, a new graph is used, which provides a simplified version of a series of bridges. For the change in topology one ``bridge'' is destroyed. The simulate destruction of the bridge, the pair of edges creating the link between nodes along the bridge are simply removed. We again predict that solutions found in the initial optimization of the first graph will lead to faster optimization of the second graph.
+%
+%To test if a change in vehicle distribution is easily adapted from pre-computed solutions, we use the graph used for testing capacity and safety. All edges and values describing the behaviour of the graph and traffic flow are identical between each other. The only safe area in the graph is found at node 24, which acts as a sink for vehicles, representing escape from danger. Vehicles are initialized in nodes 0 and 1, 1000 vehicles in each, for a total of 2000 vehicles, for graph one. In the second graph the vehicles are initialized in the top right corner and the bottom left corner, 1000 vehicles in each corner. We test our hypothesis regarding change in vehicle distribution by again optimizing each variation of the graph from initially random populations. Then we re-optimize the second graph using the first set of optimizations and compare the time needed to optimize.
+
+
+NEED GRAPHS HERE\\
+RESULTS SUBJECT TO DISCUSSION OF COURSE\\
+\begin{tabular}{l*{7}{c}}
+  \hline \hline
+  Experiment & $t_{hrs}$ & $P_x$ & $P_m$ & ES & $\sigma$ & $\lambda$ & $\mu$ \\
+  \hline
+  Capacity & 1 & 0.2 & 0.5 & + & 0.1 & 100 & 100 \\
+  Safety & 1 & 0.2 & 0.5 & + & 0.1 & 100 & 100 \\
+  Topology & 1 & 0.2 & 0.5 & + & 0.1 & 100 & 100 \\
+  Vehicle Dist. & 1 & 0.2 & 0.5 & + & 0.1 & 100 & 100  \\
+  \hline
+\end{tabular}
+
+\begin{tabular}{l*{5}{c}}
+  \hline \hline
+  Experiment & Opt. 1 & Opt. 2 & Opt. 3 & Safety \\
+  \hline
+  Capacity & 30 & 30 & 5 & 1.0 \\
+  Safety & 30 & 30 & 5 & 1.0 \\
+  Topology & 30 & 30 & 5 & 1.0 \\
+  Vehicle Dist. & 30 & 30 & 5 & 1.0 \\
+  \hline
+\end{tabular}
