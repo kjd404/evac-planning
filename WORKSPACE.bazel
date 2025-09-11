@@ -1,0 +1,3 @@
+# Empty workspace to support older Bazel versions and tooling.
+# Bzlmod is enabled via MODULE.bazel; no repos declared here.
+

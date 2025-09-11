@@ -13,31 +13,53 @@ Slang.
 - Papers/ - Reference literature.
 - Notes/ - Project notes.
 
-## Build
+## Build (Bazel)
 
-The simulator depends on g++ (C++11), flex, bison, pthreads, libm and
-libfl. Compile the engine and produce the `evac` binary:
+This repo now builds with Bazel. A minimal setup is included (Bzlmod via
+`MODULE.bazel`). Dependencies used by the simulator are generated from the
+checked‑in Flex/Bison grammars.
+
+Build the simulator:
 
 ```bash
-cd Simulation
-make
+bazel build //Simulation:evac
+```
+
+Optional: enable AddressSanitizer for debugging:
+
+```bash
+bazel build --config=asan //Simulation:evac
 ```
 
 ## Run
 
-Invoke the simulator with a scenario:
+Use the run wrapper to ensure the `outputs/` directory exists and execute the
+simulator with a scenario file:
 
 ```bash
-./evac path/to/scenario.slang
+bazel run //Simulation:evac_run -- Simulation/slang/highway.slang
+# or try the provided 4x4 grid scenario
+bazel run //Simulation:evac_run -- Simulation/slang/minigrid.slang
 ```
 
-Sample scenarios and datasets reside in `Simulation/boise`. For example:
+The wrapper sets the working directory to the workspace root and creates
+`outputs/` automatically. If you prefer to run the binary directly, create the
+directory first and pass the scenario path:
 
 ```bash
-./evac boise/boise.slang
+mkdir -p outputs
+bazel run //Simulation:evac -- Simulation/slang/highway.slang
 ```
 
-Results from prior experiments and plotting scripts are in
-`Simulation/results`. Other scenario sets, such as
-`Simulation/topologyTestProbSet`, support additional experiments.
+Results are written to `outputs/<CityName>Final.txt` (drawable format with
+edges, nodes, probabilities, and agent routes). Historical results and plotting
+scripts remain under `Simulation/results`.
 
+## Test (CI/Local)
+
+An end‑to‑end integration test runs the simulator on a small 4×4 grid and
+asserts the drawable output is produced:
+
+```bash
+bazel test //Simulation:evac_minigrid_it
+```

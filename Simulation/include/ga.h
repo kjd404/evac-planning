@@ -14,7 +14,6 @@
 #include "node.h"
 #include "city.h"
 #include "edge.h"
-#include "spec.h"
 #include "chromosome.h"
 #include "pop.h"
 #include "agent.h"

@@ -17,22 +17,27 @@
 - `Papers/` – Reference papers and related literature.
 - `Notes/` – Project notes and planning documents.
 
-## Required Dependencies
-- `g++` with C++11 support
-- `flex`
-- `bison`
-- Libraries for pthreads, math (`-lm`), and Flex (`libfl`)
+## Build Tooling
+- Bazel (Bzlmod enabled via `MODULE.bazel`)
+- Flex/Bison are invoked by Bazel to generate the lexer/parser from sources.
 
 ## Mandatory Checks
-Before committing, ensure the project builds:
+- Build succeeds:
 
-```bash
-cd Simulation && make
-```
+  ```bash
+  bazel build //Simulation:evac
+  ```
 
-Once tests are available, run:
+- Optional debug build:
 
-```bash
-make test
-```
+  ```bash
+  bazel build --config=asan //Simulation:evac
+  ```
 
+- End‑to‑end run on a scenario (produces `outputs/<CityName>Final.txt`):
+
+  ```bash
+  bazel run //Simulation:evac_run -- Simulation/slang/highway.slang
+  ```
+
+Future tests can be wired under Bazel test targets.

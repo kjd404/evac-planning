@@ -142,12 +142,12 @@ void Population::print_fitnesses() {
 }
 
 void Population::cull() {
-  //    std::multimap<float, Chromosome, std::less<float> >::iterator it;
-  std::multimap<float, Chromosome, std::greater<float> >::iterator it;
-  it = population.end();
-
+  // Remove worst elements until population size equals pop_size.
+  // Use a fresh end() each iteration to avoid invalidated iterators.
   while (population.size() > pop_size) {
-    population.erase(--it);
+    auto last = population.end();
+    --last;  // points to the worst because we use greater<float> ordering
+    population.erase(last);
   }
 }
 

@@ -1,0 +1,7 @@
+# AddressSanitizer build configuration. Enable with: --config=asan
+build:asan --copt=-fsanitize=address
+build:asan --copt=-fno-omit-frame-pointer
+build:asan --copt=-O0
+build:asan --copt=-g
+build:asan --linkopt=-fsanitize=address
+

@@ -1,0 +1,4 @@
+module(name = "gradwork", version = "0.1")
+
+# Minimal module; no external deps required. We compile using pre-generated
+# Flex/Bison outputs in Simulation/ (lex.yy.c, parser.tab.c/h).
