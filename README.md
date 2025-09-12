@@ -139,61 +139,61 @@ optimized routing qualitatively.
 
 10%
 
-![Boise 60k 10%](boise60k10p_anim.gif)
+![Boise 60k 10%](docs/boise/boise60k10p_anim.gif)
 
 20%
 
-![Boise 60k 20%](boise60k20p_anim.gif)
+![Boise 60k 20%](docs/boise/boise60k20p_anim.gif)
 
 30%
 
-![Boise 60k 30%](boise60k30p_anim.gif)
+![Boise 60k 30%](docs/boise/boise60k30p_anim.gif)
 
 40%
 
-![Boise 60k 40%](boise60k40p_anim.gif)
+![Boise 60k 40%](docs/boise/boise60k40p_anim.gif)
 
 50%
 
-![Boise 60k 50%](boise60k50p_anim.gif)
+![Boise 60k 50%](docs/boise/boise60k50p_anim.gif)
 
 60%
 
-![Boise 60k 60%](boise60k60p_anim.gif)
+![Boise 60k 60%](docs/boise/boise60k60p_anim.gif)
 
 70%
 
-![Boise 60k 70%](boise60k70p_anim.gif)
+![Boise 60k 70%](docs/boise/boise60k70p_anim.gif)
 
 80%
 
-![Boise 60k 80%](boise60k80p_anim.gif)
+![Boise 60k 80%](docs/boise/boise60k80p_anim.gif)
 
 90%
 
-![Boise 60k 90%](boise60k90p_anim.gif)
+![Boise 60k 90%](docs/boise/boise60k90p_anim.gif)
 
 100%
 
-![Boise 60k 100%](boise60k100p_anim.gif)
+![Boise 60k 100%](docs/boise/boise60k100p_anim.gif)
 
 - Capacity and safe-to-danger variants:
 
 10% pop + 40% capacity
 
-![Boise 60k 10% + 40% cap](boise60k10p40cp_anim.gif)
+![Boise 60k 10% + 40% cap](docs/boise/boise60k10p40cp_anim.gif)
 
 10% pop + 40% capacity (plain)
 
-![Boise 60k 10% + 40% cap (plain)](boise60k10p40cp_plain_anim.gif)
+![Boise 60k 10% + 40% cap (plain)](docs/boise/boise60k10p40cp_plain_anim.gif)
 
 10% pop + 40% capacity (safe-to-danger init)
 
-![Boise 60k 10% + 40% cap (S2D)](boise60k10p40cp_s2d_anim.gif)
+![Boise 60k 10% + 40% cap (S2D)](docs/boise/boise60k10p40cp_s2d_anim.gif)
 
 10% pop (safe-to-danger init)
 
-![Boise 60k 10% (S2D)](boise60k10ps2d_anim.gif)
+![Boise 60k 10% (S2D)](docs/boise/boise60k10ps2d_anim.gif)
 
 Notes:
 - “safe-to-danger” initialization seeds probabilities by moving agents from the
