@@ -81,3 +81,59 @@ sh_test(
         "slang/minigrid.slang",
     ],
 )
+
+py_binary(
+    name = "viz_gif",
+    srcs = ["tools/viz_gif.py"],
+)
+
+sh_binary(
+    name = "evac_viz_run",
+    srcs = ["run_viz.sh"],
+    data = [
+        ":evac",
+        ":viz_gif",
+    ],
+)
+
+# Hermetic drawable and GIF rules (Starlark)
+load("//Simulation:sim_rules.bzl", "run_sim_drawable", "make_gif")
+
+# Idiomatic hermetic build of drawable and GIF as Bazel outputs for a specific scenario.
+# Highway scenario: drawable (highwayFinal.txt) and animated GIF (highway_anim.gif)
+run_sim_drawable(
+    name = "drawable_highway",
+    scenario = "slang/highway.slang",
+    city = "highway",
+    out = "highwayFinal.txt",
+)
+
+make_gif(
+    name = "gif_highway",
+    drawable = ":drawable_highway",
+    out = "highway_anim.gif",
+    width = 700,
+    fps = 30,
+    duration = "10",
+    edgewidth = "prob",
+    trails = True,
+)
+
+# Minigrid scenario: drawable and GIF
+run_sim_drawable(
+    name = "drawable_minigrid",
+    scenario = "slang/minigrid.slang",
+    city = "minigrid",
+    out = "minigridFinal.txt",
+)
+
+make_gif(
+    name = "gif_minigrid",
+    drawable = ":drawable_minigrid",
+    out = "minigrid_anim.gif",
+    width = 700,
+    fps = 30,
+    duration = "10",
+    edgewidth = "prob",
+    trails = True,
+)

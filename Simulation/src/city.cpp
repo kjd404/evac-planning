@@ -222,8 +222,15 @@ void City::print_drawable() {
  * by that software.
  */ 
 void City::output_drawable() {
-  // Build output filename.
-  std::string filename = "outputs/";
+  // Build output filename (supports optional EVAC_OUTPUT_DIR override)
+  const char* outdir_env = getenv("EVAC_OUTPUT_DIR");
+  std::string filename;
+  if (outdir_env && strlen(outdir_env) > 0) {
+    filename = outdir_env;
+    if (filename.back() != '/') filename.push_back('/');
+  } else {
+    filename = "outputs/";
+  }
   filename.append(this->get_name());
   filename.append("Final.txt");
 
@@ -264,12 +271,24 @@ void City::output_drawable() {
     // Get agents.
     std::vector<Agent> copy = get_agent_vector();
 
-    // Output drawable agent data.
+    // Output drawable agent data: route (a), group size (g), and times (t)
     for (auto agent : copy) {
+      // Route
       drawable << "a ";
       drawable << agent.get_id();
       for (auto i : agent.get_route()) {
-	drawable << " " << i;
+        drawable << " " << i;
+      }
+      drawable << std::endl;
+
+      // Group size
+      drawable << "g " << agent.get_id() << " " << agent.get_member_count() << std::endl;
+
+      // Route times (absolute arrival times corresponding to route entries)
+      std::vector<float> rts = agent.get_route_times();
+      drawable << "t " << agent.get_id();
+      for (auto tf : rts) {
+        drawable << " " << tf;
       }
       drawable << std::endl;
     }

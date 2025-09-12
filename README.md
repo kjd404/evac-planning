@@ -63,3 +63,38 @@ asserts the drawable output is produced:
 ```bash
 bazel test //Simulation:evac_minigrid_it
 ```
+
+## Visualization (GIF)
+
+For hermetic, Bazel-native artifacts (preferred for CI) you can build the
+drawable and an animated GIF for the provided scenarios. These are declared
+outputs and will be written under `bazel-bin/Simulation/`.
+
+- Minigrid (4×4 grid):
+
+```bash
+bazel build //Simulation:drawable_minigrid
+bazel build //Simulation:gif_minigrid
+# Artifacts:
+#   bazel-bin/Simulation/minigridFinal.txt
+#   bazel-bin/Simulation/minigrid_anim.gif
+```
+
+- Highway:
+
+```bash
+bazel build //Simulation:drawable_highway
+bazel build //Simulation:gif_highway
+# Artifacts:
+#   bazel-bin/Simulation/highwayFinal.txt
+#   bazel-bin/Simulation/highway_anim.gif
+```
+
+Notes:
+- The renderer is a small homebrewed script (`Simulation/tools/viz_gif.py`) that
+  draws the network and agents and overlays a progress bar across the bottom of
+  the frames to highlight start/end and progress through the simulation.
+- It requires Pillow; if missing, install with `pip3 install --user Pillow`.
+- The simulator writes its drawable to a directory controlled by
+  `EVAC_OUTPUT_DIR` (set automatically by the Bazel rule) for hermetic build
+  operation.
