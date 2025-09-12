@@ -147,16 +147,8 @@ bazel build //Simulation:gif_agents
 bazel build //Simulation:gif_capacity
 bazel build //Simulation:gif_mrccp
 
-# Bazzan comparison scenario
-bazel build //Simulation:gif_bazzan
-
-# Artifacts (in bazel-bin/Simulation):
-#   topology_anim.gif
-#   safety_anim.gif
-#   agents_anim.gif
-#   capacity_anim.gif
-#   mrccp_anim.gif
-#   bazzan_anim.gif
+# Note: Non‑Boise GIFs are not committed to the repo to keep size small.
+# Build them locally as needed using the targets above.
 
 # Build everything at once
 bazel build //Simulation:all_gifs
@@ -164,38 +156,30 @@ bazel build //Simulation:all_gifs
 
 ## Research Results
 
-### Validation Tests
+### Other Experiments (Static Figures)
 
-The paper’s validation suite exercises dynamic changes to topology, safety,
-capacity, and agent distributions. The following animations correspond to those
-tests using the same SLang scenarios described in the paper:
+Static figures from the original results are included for quick reference.
+You can generate matching GIFs locally (see build targets above).
 
-- Topology changes
+Topology changes
 
-![Topology Adaptation](docs/experiments/topology_anim.gif)
+![Topology GTS](Simulation/results/topology_gts.png)
 
-- Safety function changes
+Safety function changes
 
-![Safety Adaptation](docs/experiments/safety_anim.gif)
+![Safety GTS](Simulation/results/safety_gts.png)
 
-- Capacity sensitivity
+Agent distribution changes
 
-![Capacity Sensitivity](docs/experiments/capacity_anim.gif)
+![Agents GTS](Simulation/results/agents_gts.png)
 
-- Agent distribution changes
+Capacity sensitivity and MRCCP
 
-![Agent Distribution](docs/experiments/agents_anim.gif)
+![Capacity GTS](Simulation/results/capacity_gts.png)
 
-- Capacity (MRCCP-style variant)
+Comparison (Bazzan 2014)
 
-![MRCCP Variant](docs/experiments/mrccp_anim.gif)
-
-### Comparison Test
-
-Reproduction of the Bazzan 2014 comparison network to contrast behavior against
-their macroscopic assignment approach.
-
-![Bazzan Comparison](docs/comparisons/bazzan_anim.gif)
+![Bazzan TTS](Simulation/results/bazzan_tts_graph.png)
 
 ### Real‑World (Boise)
 
