@@ -137,3 +137,78 @@ make_gif(
     edgewidth = "prob",
     trails = True,
 )
+
+# Boise experiment drawables (pre-generated during original research)
+# Build GIFs directly from historical drawable files under boise/*/outputs.
+make_gif(
+    name = "gif_boise_60k10p",
+    drawable = "boise/poptests/outputs/boise60k10pFinal.txt",
+    out = "boise60k10p_anim.gif",
+)
+make_gif(
+    name = "gif_boise_60k20p",
+    drawable = "boise/poptests/outputs/boise60k20pFinal.txt",
+    out = "boise60k20p_anim.gif",
+)
+make_gif(
+    name = "gif_boise_60k30p",
+    drawable = "boise/poptests/outputs/boise60k30pFinal.txt",
+    out = "boise60k30p_anim.gif",
+)
+make_gif(
+    name = "gif_boise_60k40p",
+    drawable = "boise/poptests/outputs/boise60k40pFinal.txt",
+    out = "boise60k40p_anim.gif",
+)
+make_gif(
+    name = "gif_boise_60k50p",
+    drawable = "boise/poptests/outputs/boise60k50pFinal.txt",
+    out = "boise60k50p_anim.gif",
+)
+make_gif(
+    name = "gif_boise_60k60p",
+    drawable = "boise/poptests/outputs/boise60k60pFinal.txt",
+    out = "boise60k60p_anim.gif",
+)
+make_gif(
+    name = "gif_boise_60k70p",
+    drawable = "boise/poptests/outputs/boise60k70pFinal.txt",
+    out = "boise60k70p_anim.gif",
+)
+make_gif(
+    name = "gif_boise_60k80p",
+    drawable = "boise/poptests/outputs/boise60k80pFinal.txt",
+    out = "boise60k80p_anim.gif",
+)
+make_gif(
+    name = "gif_boise_60k90p",
+    drawable = "boise/poptests/outputs/boise60k90pFinal.txt",
+    out = "boise60k90p_anim.gif",
+)
+make_gif(
+    name = "gif_boise_60k100p",
+    drawable = "boise/poptests/outputs/boise60k100pFinal.txt",
+    out = "boise60k100p_anim.gif",
+)
+
+# Combined pop/capacity and safe-to-danger variants
+make_gif(
+    name = "gif_boise_60k10p40cp",
+    drawable = "boise/poptests2/outputs/boise60k10p40cpFinal.txt",
+    out = "boise60k10p40cp_anim.gif",
+)
+make_gif(
+    name = "gif_boise_60k10ps2d",
+    drawable = "boise/safe2danger2/expv2/outputs/boise60k10ps2dFinal.txt",
+    out = "boise60k10ps2d_anim.gif",
+)
+make_gif(
+    name = "gif_boise_60k10p40cp_s2d",
+    drawable = "boise/safe2dangertest/outputs/boise60k10p40cps2dFinal.txt",
+    out = "boise60k10p40cp_s2d_anim.gif",
+)
+make_gif(
+    name = "gif_boise_60k10p40cp_plain",
+    drawable = "boise/safe2dangertest/outputs/boise60k10p40cpFinal.txt",
+    out = "boise60k10p40cp_plain_anim.gif",
+)
