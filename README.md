@@ -162,7 +162,42 @@ bazel build //Simulation:gif_bazzan
 bazel build //Simulation:all_gifs
 ```
 
-## Boise Experiments (Historical)
+## Research Results
+
+### Validation Tests
+
+The paper’s validation suite exercises dynamic changes to topology, safety,
+capacity, and agent distributions. The following animations correspond to those
+tests using the same SLang scenarios described in the paper:
+
+- Topology changes
+
+![Topology Adaptation](docs/experiments/topology_anim.gif)
+
+- Safety function changes
+
+![Safety Adaptation](docs/experiments/safety_anim.gif)
+
+- Capacity sensitivity
+
+![Capacity Sensitivity](docs/experiments/capacity_anim.gif)
+
+- Agent distribution changes
+
+![Agent Distribution](docs/experiments/agents_anim.gif)
+
+- Capacity (MRCCP-style variant)
+
+![MRCCP Variant](docs/experiments/mrccp_anim.gif)
+
+### Comparison Test
+
+Reproduction of the Bazzan 2014 comparison network to contrast behavior against
+their macroscopic assignment approach.
+
+![Bazzan Comparison](docs/comparisons/bazzan_anim.gif)
+
+### Real‑World (Boise)
 
 The following animations were generated from historical drawable outputs of the
 Boise network experiments used in the research. They visualize agent movement
@@ -238,55 +273,16 @@ Notes:
   probabilities adapt by redirecting flow away from bottlenecks while guiding
   agents toward high-safety sinks.
 
-## Other Experiments (Historical)
+### Supporting Figures
 
-The following experiment families were used to validate behavior and compare to
-prior work. Static figures below come from the original results; you can rebuild
-hermetic drawables and GIFs using the targets listed above.
-
-### Topology Changes
-
-Tests where connections are added/removed during evolution to check rapid
-adaptation to changed topology.
-
-![Topology GTS](Simulation/results/topology_gts.png)
-
-### Safety Function Changes
-
-Tests where node/edge safety values change to verify the optimizer steers flow
-toward newly safer regions.
-
-![Safety GTS](Simulation/results/safety_gts.png)
-
-### Agent Distribution Changes
-
-Varying initial agent locations and proportions; tracks convergence behavior and
-impact on group-level travel and safety.
-
-![Agents GTS](Simulation/results/agents_gts.png)
-
-### Capacity Sensitivity and MRCCP
-
-Capacity-focused runs and a recreation of the constrained-routing MRCCP-style
-topology used for comparison.
-
-![Capacity GTS](Simulation/results/capacity_gts.png)
-
-### Bazzan Comparison
-
-Reproduction of the Bazzan 2014 setup for qualitative/quantitative comparison
-against a fixed set of OD pairs and network timings.
-
-![Bazzan TTS](Simulation/results/bazzan_tts_graph.png)
-
-### Validation (Grid/Maze)
+Validation (Grid/Maze)
 
 Basic grid/maze validations to confirm designated routes are discovered under
 freeflow/capacity perturbations.
 
 ![Maze Default Solution](Paper/maze_default_solution.png)
 
-### Performance (Boise Runtime)
+Performance (Boise Runtime)
 
 Runtime scaling for Boise population experiments.
 
