@@ -68,7 +68,8 @@ command: exit { printf( "Exiting...\n" ); exit(0); }
 	| probabilities
         | parameters
         | slang
-	| probs;
+	| probs
+        | NL;  // allow blank lines as no-op commands
 
 exit: EXIT NL | QUIT NL;
 
@@ -161,4 +162,3 @@ static void yyerror( const char* s ) {
 	  yylval.treeptr->u.tokptr->text );
   exit( 2 );
 }
-

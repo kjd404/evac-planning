@@ -212,3 +212,142 @@ make_gif(
     drawable = "boise/safe2dangertest/outputs/boise60k10p40cpFinal.txt",
     out = "boise60k10p40cp_plain_anim.gif",
 )
+
+# Historical/validation scenarios: hermetic drawable + GIF
+
+run_sim_drawable(
+    name = "drawable_topology",
+    scenario = "slang/topology.slang",
+    city = "topologyTest",
+    out = "topologyTestFinal.txt",
+)
+
+make_gif(
+    name = "gif_topology",
+    drawable = ":drawable_topology",
+    out = "topology_anim.gif",
+    width = 700,
+    fps = 30,
+    duration = "10",
+    edgewidth = "prob",
+    trails = True,
+)
+
+run_sim_drawable(
+    name = "drawable_safety",
+    scenario = "slang/safety.slang",
+    city = "safetyTest",
+    out = "safetyTestFinal.txt",
+)
+
+make_gif(
+    name = "gif_safety",
+    drawable = ":drawable_safety",
+    out = "safety_anim.gif",
+    width = 700,
+    fps = 30,
+    duration = "10",
+    edgewidth = "prob",
+    trails = True,
+)
+
+run_sim_drawable(
+    name = "drawable_agents",
+    scenario = "slang/agents.slang",
+    city = "agentsTest",
+    out = "agentsTestFinal.txt",
+)
+
+make_gif(
+    name = "gif_agents",
+    drawable = ":drawable_agents",
+    out = "agents_anim.gif",
+    width = 700,
+    fps = 30,
+    duration = "10",
+    edgewidth = "prob",
+    trails = True,
+)
+
+run_sim_drawable(
+    name = "drawable_capacity",
+    scenario = "slang/capacity.slang",
+    city = "capacityTest",
+    out = "capacityTestFinal.txt",
+)
+
+make_gif(
+    name = "gif_capacity",
+    drawable = ":drawable_capacity",
+    out = "capacity_anim.gif",
+    width = 700,
+    fps = 30,
+    duration = "10",
+    edgewidth = "prob",
+    trails = True,
+)
+
+run_sim_drawable(
+    name = "drawable_bazzan",
+    scenario = "slang/bazzan.slang",
+    city = "bazzan",
+    out = "bazzanFinal.txt",
+)
+
+make_gif(
+    name = "gif_bazzan",
+    drawable = ":drawable_bazzan",
+    out = "bazzan_anim.gif",
+    width = 700,
+    fps = 30,
+    duration = "10",
+    edgewidth = "prob",
+    trails = True,
+)
+
+run_sim_drawable(
+    name = "drawable_mrccp",
+    scenario = "slang/mrccp.slang",
+    city = "mrccpCity",
+    out = "mrccpCityFinal.txt",
+)
+
+make_gif(
+    name = "gif_mrccp",
+    drawable = ":drawable_mrccp",
+    out = "mrccp_anim.gif",
+    width = 700,
+    fps = 30,
+    duration = "10",
+    edgewidth = "prob",
+    trails = True,
+)
+
+# Convenience group to build all GIFs
+filegroup(
+    name = "all_gifs",
+    srcs = [
+        ":gif_highway",
+        ":gif_minigrid",
+        ":gif_topology",
+        ":gif_safety",
+        ":gif_agents",
+        ":gif_capacity",
+        ":gif_mrccp",
+        ":gif_bazzan",
+        ":gif_boise_60k10p",
+        ":gif_boise_60k20p",
+        ":gif_boise_60k30p",
+        ":gif_boise_60k40p",
+        ":gif_boise_60k50p",
+        ":gif_boise_60k60p",
+        ":gif_boise_60k70p",
+        ":gif_boise_60k80p",
+        ":gif_boise_60k90p",
+        ":gif_boise_60k100p",
+        ":gif_boise_60k10p40cp",
+        ":gif_boise_60k10ps2d",
+        ":gif_boise_60k10p40cp_s2d",
+        ":gif_boise_60k10p40cp_plain",
+    ],
+)
