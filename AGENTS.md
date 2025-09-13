@@ -14,7 +14,6 @@
 - `Simulation/` – C++ simulation engine and build files.
 - `Slang/` – LaTeX sources for the scenario language documentation.
 - `Paper/` – Drafts and resources for the main research paper.
-- `Papers/` – Reference papers and related literature.
 - `Notes/` – Project notes and planning documents.
 
 ## Build Tooling

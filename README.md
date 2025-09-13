@@ -26,7 +26,6 @@ of the original simulator and scenarios.
 - `Simulation/` – C++ simulation engine, SLang lexer/parser, Bazel targets.
 - `Slang/` – LaTeX source of the SLang language reference.
 - `Paper/` – Draft of the research paper, figures, and resources.
-- `Papers/` – Reference literature and related work.
 - `Notes/` – Project notes used during the original research.
 
 ## Architecture in Brief
