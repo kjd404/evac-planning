@@ -1,2 +1,46 @@
 *.DS_Store
 MODULE.bazel.lock
+
+# Bazel
+/bazel-*
+*.runfiles/
+
+# Local outputs
+/outputs/
+Simulation/outputs/
+
+# Generated parser/lexer
+Simulation/lex.yy.c
+Simulation/parser.tab.c
+Simulation/parser.tab.h
+
+# Binaries and debug artifacts
+*.o
+*.a
+*.so
+*.dylib
+Simulation/sim
+*/sim.dSYM/
+
+# Editors
+*~
+#*#
+.*.swp
+.*.swo
+
+# Python
+__pycache__/
+*.pyc
+
+# LaTeX build files
+Paper/*.aux
+Paper/*.bbl
+Paper/*.blg
+Paper/*.log
+Paper/*.out
+Paper/*.toc
+Paper/*.synctex.gz
+Slang/*.aux
+Slang/*.log
+Slang/*.out
+Slang/*.toc
