@@ -478,15 +478,37 @@ void exhaustive_search() {
 
 void read_probs(char *filename) {
   std::ifstream file;
-  file.open(filename);
+  std::string arg = filename ? std::string(filename) : std::string();
+  std::vector<std::string> candidates;
 
-  printf("%s\n", filename);
-  if (!file.is_open()) {
-    printf("Problem reading probability file. File %s does not exist.\n",
-	   filename);
+  if (!arg.empty()) {
+    candidates.push_back(arg);
+    if (arg.find(".probset") == std::string::npos) {
+      candidates.push_back(arg + ".probset");
+    }
+    const char* outdir_env = getenv("EVAC_OUTPUT_DIR");
+    std::string outdir = (outdir_env && outdir_env[0] != '\0') ? std::string(outdir_env)
+                                                               : std::string("outputs/");
+    if (!outdir.empty() && outdir.back() != '/') outdir.push_back('/');
+    candidates.push_back(outdir + arg);
+    if (arg.find(".probset") == std::string::npos) {
+      candidates.push_back(outdir + arg + ".probset");
+    }
+  }
 
+  std::string opened;
+  for (const auto& p : candidates) {
+    file.open(p);
+    if (file.is_open()) { opened = p; break; }
+    file.clear();
+  }
+
+  if (opened.empty()) {
+    printf("Problem reading probability file. Could not open '%s' or fallbacks.\n",
+           filename ? filename : "(null)");
     return;
   }
+  printf("Reading probability file: %s\n", opened.c_str());
 
   int num_sets, num_nodes, num_probs;
   float prob;
@@ -524,9 +546,13 @@ void print_header() {
 
 void write_best_probs(std::vector<Chromosome> pop) {
   FILE *out;
-  std::string fname = theCity->get_name();
-  fname.append("ProbSet");
-  out = fopen(fname.c_str(), "w");
+  const char* outdir_env = getenv("EVAC_OUTPUT_DIR");
+  std::string filepath = (outdir_env && outdir_env[0] != '\0') ? std::string(outdir_env)
+                                                               : std::string("outputs/");
+  if (!filepath.empty() && filepath.back() != '/') filepath.push_back('/');
+  filepath.append(theCity->get_name());
+  filepath.append("ProbSet.probset");
+  out = fopen(filepath.c_str(), "w");
 
   fprintf(out, "%zu\n", pop.size());
   for (auto c : pop) {

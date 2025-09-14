@@ -53,3 +53,5 @@ slang/*.aux
 slang/*.log
 slang/*.out
 slang/*.toc
+# Ignore legacy probability set outputs (untracked only)
+*ProbSet
