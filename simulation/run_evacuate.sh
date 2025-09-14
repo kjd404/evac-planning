@@ -3,9 +3,9 @@ set -euo pipefail
 
 # Locate the evac binary in runfiles
 if [[ -n "${RUNFILES_DIR:-}" ]]; then
-  BIN="$RUNFILES_DIR/_main/Simulation/evac"
+  BIN="$RUNFILES_DIR/_main/simulation/evac"
 else
-  BIN="${0}.runfiles/_main/Simulation/evac"
+  BIN="${0}.runfiles/_main/simulation/evac"
 fi
 
 # Resolve workspace directory and ensure outputs/ exists there

@@ -1,38 +1,24 @@
 package(default_visibility = ["//visibility:public"])
 
-genrule(
-    name = "bison_gen",
-    srcs = ["src/parser.y"],
-    outs = ["parser.tab.c", "parser.tab.h"],
-    cmd = "bison -d -o $(@D)/parser.tab.c $(location src/parser.y)",
-)
-
-genrule(
-    name = "flex_gen",
-    srcs = ["src/lexer.l"],
-    outs = ["lex.yy.c"],
-    cmd = "flex -o $(@D)/lex.yy.c $(location src/lexer.l)",
-)
-
 cc_library(
     name = "parser_lib",
-    srcs = [":parser.tab.c"],
-    hdrs = glob(["include/*.h"]) + [":parser.tab.h"],
+    srcs = ["generated/parser.tab.c"],
+    hdrs = glob(["include/*.h"]) + ["generated/parser.tab.h"],
     copts = [
         "-x", "c++",
-        "-ISimulation/include", "-ISimulation",
+        "-Isimulation/include", "-Isimulation",
     ],
-    includes = ["include", "."],
+    includes = ["include", "generated", "."],
 )
 
 cc_library(
     name = "evac_lib",
-    srcs = glob(["src/*.cpp"], exclude=["src/sim.cpp", "src/spec.cpp"]),
+    srcs = glob(["src/core/*.cpp"]),
     hdrs = glob(["include/*.h"]),
     copts = [
         "-std=c++11",
-        "-ISimulation/include",
-        "-ISimulation",
+        "-Isimulation/include",
+        "-Isimulation",
     ],
     includes = [
         "include",
@@ -47,16 +33,16 @@ cc_library(
 cc_binary(
     name = "evac",
     srcs = [
-        ":lex.yy.c",
-        "src/sim.cpp",
-        "src/spec.cpp",
+        "generated/lex.yy.c",
+        "src/app/sim.cpp",
+        "src/app/spec.cpp",
     ],
     copts = [
         "-std=c++11",
         "-x",
         "c++",  # Treat .c Bison/Flex outputs as C++ like the original Makefile did via g++
-        "-ISimulation/include",
-        "-ISimulation",
+        "-Isimulation/include",
+        "-Isimulation",
     ],
     deps = [":evac_lib", ":parser_lib"],
     linkopts = [
@@ -97,7 +83,7 @@ sh_binary(
 )
 
 # Hermetic drawable and GIF rules (Starlark)
-load("//Simulation:sim_rules.bzl", "run_sim_drawable", "make_gif")
+load("//simulation:sim_rules.bzl", "run_sim_drawable", "make_gif")
 
 # Idiomatic hermetic build of drawable and GIF as Bazel outputs for a specific scenario.
 # Highway scenario: drawable (highwayFinal.txt) and animated GIF (highway_anim.gif)

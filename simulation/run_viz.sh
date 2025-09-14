@@ -10,12 +10,12 @@ SCEN_ARG="$1"; shift || true
 
 # Resolve runfiles
 if [[ -n "${RUNFILES_DIR:-}" ]]; then
-  BIN="$RUNFILES_DIR/_main/Simulation/evac"
-  VIZ="$RUNFILES_DIR/_main/Simulation/tools/viz_gif.py"
+  BIN="$RUNFILES_DIR/_main/simulation/evac"
+  VIZ="$RUNFILES_DIR/_main/simulation/tools/viz_gif.py"
 else
   ROOT="${0}.runfiles/_main"
-  BIN="$ROOT/Simulation/evac"
-  VIZ="$ROOT/Simulation/tools/viz_gif.py"
+  BIN="$ROOT/simulation/evac"
+  VIZ="$ROOT/simulation/tools/viz_gif.py"
 fi
 
 # Resolve workspace

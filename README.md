@@ -8,7 +8,7 @@ The research proposes optimizing static routing distributions (node → edge
 probabilities) with an Evolution Strategy to maximize safety while accounting
 for congestion and variability in traveler behavior. The simulator is a
 macroscopic agent model using a BPR-style travel-time link function. A detailed
-write‑up appears in the Paper/ directory (see `Paper/Paper.tex`).
+write‑up appears in the paper/ directory (see `paper/Paper.tex`).
 
 Funding and rights: This work was funded by the U.S. National Science
 Foundation (NSF) and performed at the University of Idaho (UOI). Copyright and
@@ -23,10 +23,9 @@ of the original simulator and scenarios.
 
 ## Directory Map
 
-- `Simulation/` – C++ simulation engine, SLang lexer/parser, Bazel targets.
-- `Slang/` – LaTeX source of the SLang language reference.
-- `Paper/` – Draft of the research paper, figures, and resources.
-- `Notes/` – Project notes used during the original research.
+- `simulation/` – C++ simulation engine, SLang lexer/parser, Bazel targets.
+- `slang/` – LaTeX source of the SLang language reference.
+- `paper/` – Draft of the research paper, figures, and resources.
 
 ## Architecture in Brief
 
@@ -41,19 +40,21 @@ of the original simulator and scenarios.
 
 ## Build (Bazel)
 
-This repo builds with Bazel (Bzlmod via `MODULE.bazel`). Flex/Bison are run by
-the build to generate the lexer/parser from sources.
+This repo builds with Bazel (Bzlmod via `MODULE.bazel`). To keep builds simple
+and reproducible, the lexer/parser C sources live in `simulation/generated/` and
+are consumed directly by Bazel. You can regenerate them with Flex/Bison if you
+wish, but it is not required to build.
 
 Build the simulator:
 
 ```bash
-bazel build //Simulation:evac
+bazel build //simulation:evac
 ```
 
 Optional AddressSanitizer for debugging:
 
 ```bash
-bazel build --config=asan //Simulation:evac
+bazel build --config=asan //simulation:evac
 ```
 
 ## Run
@@ -62,9 +63,9 @@ Use the run wrapper to ensure the `outputs/` directory exists and execute the
 simulator with a scenario file:
 
 ```bash
-bazel run //Simulation:evac_run -- Simulation/slang/highway.slang
+bazel run //simulation:evac_run -- simulation/slang/highway.slang
 # or the 4×4 grid scenario
-bazel run //Simulation:evac_run -- Simulation/slang/minigrid.slang
+bazel run //simulation:evac_run -- simulation/slang/minigrid.slang
 ```
 
 The wrapper sets the working directory to the workspace root and creates
@@ -73,12 +74,12 @@ directory first and pass the scenario path:
 
 ```bash
 mkdir -p outputs
-bazel run //Simulation:evac -- Simulation/slang/highway.slang
+bazel run //simulation:evac -- simulation/slang/highway.slang
 ```
 
 Results are written to `outputs/<CityName>Final.txt` (drawable format with
 edges, nodes, probabilities, and agent routes). Historical results and plotting
-scripts remain under `Simulation/results`.
+scripts remain under `simulation/results`.
 
 ## Test (CI/Local)
 
@@ -86,39 +87,39 @@ A small end‑to‑end integration test runs the simulator on a 4×4 grid and as
 the drawable is produced:
 
 ```bash
-bazel test //Simulation:evac_minigrid_it
+bazel test //simulation:evac_minigrid_it
 ```
 
 ## Visualization (GIF)
 
 For hermetic, Bazel‑native artifacts (preferred for CI) you can build the
 drawable and an animated GIF for the provided scenarios. Artifacts are written
-to `bazel-bin/Simulation/`.
+to `bazel-bin/simulation/`.
 
 - Minigrid (4×4 grid):
 
 ```bash
 # Requires Pillow: pip3 install --user Pillow
-bazel build //Simulation:drawable_minigrid
-bazel build //Simulation:gif_minigrid
+bazel build //simulation:drawable_minigrid
+bazel build //simulation:gif_minigrid
 # Artifacts:
-#   bazel-bin/Simulation/minigridFinal.txt
-#   bazel-bin/Simulation/minigrid_anim.gif
+#   bazel-bin/simulation/minigridFinal.txt
+#   bazel-bin/simulation/minigrid_anim.gif
 ```
 
 - Highway:
 
 ```bash
 # Requires Pillow: pip3 install --user Pillow
-bazel build //Simulation:drawable_highway
-bazel build //Simulation:gif_highway
+bazel build //simulation:drawable_highway
+bazel build //simulation:gif_highway
 # Artifacts:
-#   bazel-bin/Simulation/highwayFinal.txt
-#   bazel-bin/Simulation/highway_anim.gif
+#   bazel-bin/simulation/highwayFinal.txt
+#   bazel-bin/simulation/highway_anim.gif
 ```
 
 Notes:
-- The renderer (Simulation/tools/viz_gif.py) is a small homebrewed script that
+- The renderer (simulation/tools/viz_gif.py) is a small homebrewed script that
   draws the network and agents and overlays a progress bar across the bottom to
   highlight start/end and progress through the simulation. It supports trails,
   edge width by probability, and scaling by group size.
@@ -134,23 +135,23 @@ then render a GIF using the bundled Python visualizer.
 ```bash
 # Requires Pillow: pip3 install --user Pillow
 # Topology change adaptation
-bazel build //Simulation:gif_topology
+bazel build //simulation:gif_topology
 
 # Safety function adaptation
-bazel build //Simulation:gif_safety
+bazel build //simulation:gif_safety
 
 # Agent distribution variation
-bazel build //Simulation:gif_agents
+bazel build //simulation:gif_agents
 
 # Capacity sensitivity (also see MRCCP topology)
-bazel build //Simulation:gif_capacity
-bazel build //Simulation:gif_mrccp
+bazel build //simulation:gif_capacity
+bazel build //simulation:gif_mrccp
 
 # Note: Non‑Boise GIFs are not committed to the repo to keep size small.
 # Build them locally as needed using the targets above.
 
 # Build everything at once
-bazel build //Simulation:all_gifs
+bazel build //simulation:all_gifs
 ```
 
 ## Research Results
@@ -162,23 +163,23 @@ You can generate matching GIFs locally (see build targets above).
 
 Topology changes
 
-![Topology GTS](Simulation/results/topology_gts.png)
+![Topology GTS](simulation/results/topology_gts.png)
 
 Safety function changes
 
-![Safety GTS](Simulation/results/safety_gts.png)
+![Safety GTS](simulation/results/safety_gts.png)
 
 Agent distribution changes
 
-![Agents GTS](Simulation/results/agents_gts.png)
+![Agents GTS](simulation/results/agents_gts.png)
 
 Capacity sensitivity and MRCCP
 
-![Capacity GTS](Simulation/results/capacity_gts.png)
+![Capacity GTS](simulation/results/capacity_gts.png)
 
 Comparison (Bazzan 2014)
 
-![Bazzan TTS](Simulation/results/bazzan_tts_graph.png)
+![Bazzan TTS](simulation/results/bazzan_tts_graph.png)
 
 ### Real‑World (Boise)
 
@@ -263,13 +264,13 @@ Validation (Grid/Maze)
 Basic grid/maze validations to confirm designated routes are discovered under
 freeflow/capacity perturbations.
 
-![Maze Default Solution](Paper/maze_default_solution.png)
+![Maze Default Solution](paper/maze_default_solution.png)
 
 Performance (Boise Runtime)
 
 Runtime scaling for Boise population experiments.
 
-![Boise Runtime](Simulation/results/boise_runtime_graph.png)
+![Boise Runtime](simulation/results/boise_runtime_graph.png)
 
 ## Contributing & Modernization
 

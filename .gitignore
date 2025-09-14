@@ -1,5 +1,4 @@
 *.DS_Store
-MODULE.bazel.lock
 
 # Bazel
 /bazel-*
@@ -7,40 +6,50 @@ MODULE.bazel.lock
 
 # Local outputs
 /outputs/
-Simulation/outputs/
+simulation/outputs/
 
 # Generated parser/lexer
-Simulation/lex.yy.c
-Simulation/parser.tab.c
-Simulation/parser.tab.h
+# Generated lexer/parser (tracked to avoid requiring Flex/Bison at build time)
+# Note: keep these committed and in sync with src/grammar/*.l/*.y
+# (Bazel consumes them directly.)
 
 # Binaries and debug artifacts
 *.o
 *.a
 *.so
 *.dylib
-Simulation/sim
+simulation/sim
 */sim.dSYM/
 
 # Editors
 *~
 #*#
+.#*
 .*.swp
 .*.swo
+.vscode/
+.idea/
+.ropeproject/
+
+# OS artifacts
+Thumbs.db
+Desktop.ini
+ehthumbs.db
+._*
 
 # Python
 __pycache__/
 *.pyc
 
 # LaTeX build files
-Paper/*.aux
-Paper/*.bbl
-Paper/*.blg
-Paper/*.log
-Paper/*.out
-Paper/*.toc
-Paper/*.synctex.gz
-Slang/*.aux
-Slang/*.log
-Slang/*.out
-Slang/*.toc
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.log
+paper/*.out
+paper/*.toc
+paper/*.synctex.gz
+slang/*.aux
+slang/*.log
+slang/*.out
+slang/*.toc

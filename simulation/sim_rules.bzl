@@ -34,7 +34,7 @@ run_sim_drawable = rule(
     attrs = {
         "scenario": attr.label(allow_single_file = True, mandatory = True),
         "city": attr.string(mandatory = True),
-        "sim": attr.label(executable = True, cfg = "exec", default = Label("//Simulation:evac")),
+        "sim": attr.label(executable = True, cfg = "exec", default = Label("//simulation:evac")),
         "out": attr.output(mandatory = True),
     },
 )
@@ -75,7 +75,7 @@ make_gif = rule(
     implementation = _make_gif_impl,
     attrs = {
         "drawable": attr.label(allow_single_file = True, mandatory = True),
-        "viz_py": attr.label(allow_single_file = True, default = Label("//Simulation:tools/viz_gif.py")),
+        "viz_py": attr.label(allow_single_file = True, default = Label("//simulation:tools/viz_gif.py")),
         "width": attr.int(default = 700),
         "fps": attr.int(default = 30),
         "duration": attr.string(default = "10"),
