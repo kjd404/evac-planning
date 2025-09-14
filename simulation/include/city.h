@@ -48,8 +48,8 @@ class City {
   int get_num_nodes() { return num_nodes; }
   int get_degree() { return degree; }
 
-  std::vector<std::shared_ptr<Node> > get_nodes() { return nodes; }
-  std::vector<std::shared_ptr<Edge> > get_edges() { return edges; }
+  const std::vector<std::shared_ptr<Node> >& get_nodes() const { return nodes; }
+  const std::vector<std::shared_ptr<Edge> >& get_edges() const { return edges; }
 
   std::shared_ptr<Node> get_node(int node_id) { return nodes.at(node_id); }
 
@@ -57,10 +57,10 @@ class City {
     std::deque<Agent>,
     Agent::cmpSoonest> get_agents() { return agents; }
 
-  std::vector<Agent> get_agent_vector();
+  std::vector<Agent> get_agent_vector() const;
 
-  int num_agents() { return agents.size(); }
-  int agent_group_size() { return init_agents[0].get_member_count(); }
+  int num_agents() const { return agents.size(); }
+  int agent_group_size() const { return init_agents[0].get_member_count(); }
 
   float get_fitness();
   float sim_time() const { return sim_hours; }
@@ -106,7 +106,7 @@ class City {
   // There is a mapping from index to node IDs.
   void set_nodes(std::vector< std::vector<float> > prob_set);
 
-  // Runs the agent simulation - specified for ahmeds tests
+  // Runs the agent simulation - specified for ahmeds tests (deprecated)
   float simulate();
 
   // Runs the simulation that optimizes safety
@@ -118,8 +118,10 @@ class City {
   // Gets the set of all unique routes agents took in the last simulation
   std::vector<std::vector<int> > get_route_set();
 
-  // Returns safety over time
-  std::vector<float> get_safety_over_time() const { return safety_over_time; }
+  // Returns safety over time (const view) and mutators for external writers
+  const std::vector<float>& get_safety_over_time() const { return safety_over_time; }
+  void clear_safety_over_time() { safety_over_time.clear(); }
+  void append_safety_over_time(float v) { safety_over_time.push_back(v); }
 
   // Takes a node and selects an outgoing edge based on the probabilities
   std::shared_ptr<Edge> get_next_edge(std::shared_ptr<Node>);

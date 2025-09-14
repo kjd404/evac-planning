@@ -26,7 +26,7 @@ class Chromosome {
     Chromosome mutate();
     Chromosome cross(Chromosome);
 
-    void print_chromosome();
+    void print_chromosome() const;
 };
 
 #endif  // SIMULATION_INCLUDE_CHROMOSOME_H_

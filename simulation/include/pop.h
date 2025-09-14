@@ -28,17 +28,15 @@ class Population {
   // return population;
   // }
 
-  std::multimap<float, Chromosome, std::greater<float>> get_population() {
-    return population;
-  }
+  const std::multimap<float, Chromosome, std::greater<float>>& get_population() const { return population; }
 
-  std::pair<float, Chromosome> get_best();
+  std::pair<float, Chromosome> get_best() const;
 
-  std::vector<Chromosome> vector_best();
-  std::vector<Chromosome> get_vector();
+  std::vector<Chromosome> vector_best() const;
+  std::vector<Chromosome> get_vector() const;
 
-  void print_population();
-  void print_fitnesses();
+  void print_population() const;
+  void print_fitnesses() const;
 
   void add_chromosome(float f, Chromosome ind);
   void insert(int tourney_size, std::pair<float, Chromosome>);

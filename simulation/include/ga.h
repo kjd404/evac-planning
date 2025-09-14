@@ -25,8 +25,15 @@ extern Parameters params;
 extern std::vector<Chromosome> predefined_probabilities;
 
 // Run wrapper - keeps things modular. Allows addition of different GAs later.
-void run_ga(int ga_code, int iterations, int population,
-             int runs, int print_interval);
+// Signature matches implementation and parser usage:
+//   ga_code, iterations, print_interval, runs, population
+// ga_code values:
+//   0: generational (deprecated)
+//   1: evolution strategy (ES)
+//   2: probability initialization (safety->danger)
+//   3: Dijkstra simulation
+void run_ga(int ga_code, int iterations, int print_interval,
+            int runs, int population);
 
 // Generational algorithm. Runs for iterations, on population,
 // printing/outputting at print_interval

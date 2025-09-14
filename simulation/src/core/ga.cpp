@@ -101,7 +101,7 @@ void generational(int iterations, int print_interval, int population_size) {
     }
   }
 
-  printf("Pop1.size: %lu, Pop2.size: %lu\n", pop_one.get_population().size(),
+  printf("Pop1.size: %zu, Pop2.size: %zu\n", pop_one.get_population().size(),
 	  pop_two.get_population().size());
 
   tmp_pair1 = pop_one.get_best();
@@ -384,7 +384,7 @@ void simulate_from_file(char *filename) {
   std::string fname = "sims/";
   fname.append(filename);
   fname.append(".txt");
-  std::cout << fname << std::endl;
+  printf("%s\n", fname.c_str());
   std::ifstream file;
   file.open(fname.c_str());
 
@@ -480,7 +480,7 @@ void read_probs(char *filename) {
   std::ifstream file;
   file.open(filename);
 
-  std::cout << filename << std::endl;
+  printf("%s\n", filename);
   if (!file.is_open()) {
     printf("Problem reading probability file. File %s does not exist.\n",
 	   filename);
@@ -528,13 +528,13 @@ void write_best_probs(std::vector<Chromosome> pop) {
   fname.append("ProbSet");
   out = fopen(fname.c_str(), "w");
 
-  fprintf(out, "%lu\n", pop.size());
+  fprintf(out, "%zu\n", pop.size());
   for (auto c : pop) {
     std::vector<std::vector<float> > p = c.get_data();
 
-    fprintf(out, "%lu\n", p.size());
+    fprintf(out, "%zu\n", p.size());
     for (auto n : p) {
-      fprintf(out, "%lu", n.size());
+      fprintf(out, "%zu", n.size());
       for (auto f : n) {
 	fprintf(out, " %f", f);
       }
@@ -724,31 +724,31 @@ void probability_init_safety_to_danger(int iterations, int population,
 /******************************************************************************
  * Start of portion for Dijkstra's algorithm
  ******************************************************************************/
-void addParentToRoute(std::shared_ptr<Node> child,
-                      std::map<std::shared_ptr<Node>,std::shared_ptr<Node>> parents,
-                      std::vector<std::shared_ptr<Node>> &routes) {
+void add_parent_to_route(std::shared_ptr<Node> child,
+                         std::map<std::shared_ptr<Node>,std::shared_ptr<Node>> parents,
+                         std::vector<std::shared_ptr<Node>> &routes) {
     auto itParent = parents.find(child);
-    if (itParent->second == NULL) {
+    if (itParent->second == nullptr) {
         return;
     } else {
-        addParentToRoute(itParent->second, parents, routes);
+        add_parent_to_route(itParent->second, parents, routes);
         routes.push_back(itParent->second);
     }
     return;
 }
 
-std::shared_ptr<Edge> getEdgeConnectingFromAndTo(std::shared_ptr<Node> from,
-                                                 std::shared_ptr<Node> to) {
+std::shared_ptr<Edge> get_edge_connecting_from_to(std::shared_ptr<Node> from,
+                                                  std::shared_ptr<Node> to) {
     for (auto ep : from->get_prob()) {
         std::shared_ptr<Edge> e = ep.first;
         if (e->get_to() == to) {
             return e;
         }
     }
-    return NULL;
+    return nullptr;
 }
 
-std::vector<Agent> getAgentsVector(std::priority_queue<Agent, std::deque<Agent>, Agent::cmpSoonest> agentsQueue) {
+std::vector<Agent> get_agents_vector(std::priority_queue<Agent, std::deque<Agent>, Agent::cmpSoonest> agentsQueue) {
     std::priority_queue<Agent, std::deque<Agent>, Agent::cmpSoonest> agents_tmp = agentsQueue;
 
     // Create the vector object
@@ -763,9 +763,9 @@ std::vector<Agent> getAgentsVector(std::priority_queue<Agent, std::deque<Agent>,
     return agent_vector;
 }
 
-float getSumSafety(std::priority_queue<Agent, std::deque<Agent>, Agent::cmpSoonest> agentsQueue) {
+float get_sum_safety_queue(std::priority_queue<Agent, std::deque<Agent>, Agent::cmpSoonest> agentsQueue) {
     float total_safety = 0.0;
-    std::vector<Agent> agent_vector = getAgentsVector(agentsQueue);
+    std::vector<Agent> agent_vector = get_agents_vector(agentsQueue);
     for (auto a : agent_vector) {
         total_safety += a.get_curr_safety();
     }
@@ -776,7 +776,7 @@ float getSumSafety(std::priority_queue<Agent, std::deque<Agent>, Agent::cmpSoone
  * Dijkstra's algorithm from start node to destination node
  */
 void dijkstra_algorithm(std::shared_ptr<Node> startNode, std::vector<std::shared_ptr<Node>> &routes) {
-    std::shared_ptr<Node> destinationNode = NULL;
+    std::shared_ptr<Node> destinationNode = nullptr;
     
     std::vector<std::shared_ptr<Node> > nodes = theCity->get_nodes();
     double inf = std::numeric_limits<double>::infinity();
@@ -800,7 +800,7 @@ void dijkstra_algorithm(std::shared_ptr<Node> startNode, std::vector<std::shared
         }
         notVisitedSet.insert(nodes.at(i));
         parents.insert(std::pair<std::shared_ptr<Node>, std::shared_ptr<Node>>
-                       (nodes.at(i), NULL));
+                       (nodes.at(i), nullptr));
     }
     
     while (sptSet.size() < nodes.size()) {
@@ -832,13 +832,13 @@ void dijkstra_algorithm(std::shared_ptr<Node> startNode, std::vector<std::shared
             }
         }
         // set destination to nearest safe node
-        if (destinationNode == NULL && minNode->get_safety() == 1.0) {
+        if (destinationNode == nullptr && minNode->get_safety() == 1.0) {
             destinationNode = minNode;
         }
     }
     
     routes.clear();
-    addParentToRoute(destinationNode, parents, routes);
+    add_parent_to_route(destinationNode, parents, routes);
     routes.push_back(destinationNode);
     
     // print route
@@ -849,24 +849,24 @@ void dijkstra_algorithm(std::shared_ptr<Node> startNode, std::vector<std::shared
     printf("\n");
 }
 
-std::shared_ptr<Edge> getNextEdge(std::shared_ptr<Node> currentNode) {
+std::shared_ptr<Edge> get_dijkstra_next_edge(std::shared_ptr<Node> currentNode) {
     std::vector<std::shared_ptr<Node>> routes;
     dijkstra_algorithm(currentNode, routes);
     
     for (int i = 0; i < routes.size(); i++) {
         if(routes.at(i)->get_id() == currentNode->get_id()) {
             if(i < routes.size()-1) {
-                return getEdgeConnectingFromAndTo(routes.at(i), routes.at(i+1));
+                return get_edge_connecting_from_to(routes.at(i), routes.at(i+1));
             } else {
-                return getEdgeConnectingFromAndTo(routes.at(i), routes.at(i));
+                return get_edge_connecting_from_to(routes.at(i), routes.at(i));
             }
         }
     }
     
-    return NULL;
+    return nullptr;
 }
 
-void outputDrawable(std::priority_queue<Agent, std::deque<Agent>, Agent::cmpSoonest> agents) {
+void output_drawable_dijkstra(std::priority_queue<Agent, std::deque<Agent>, Agent::cmpSoonest> agents) {
     // Build output filename.
     std::string filename = "outputs/";
     filename.append(theCity->get_name());
@@ -907,7 +907,7 @@ void outputDrawable(std::priority_queue<Agent, std::deque<Agent>, Agent::cmpSoon
         }
         
         // Get agents.
-        std::vector<Agent> copy = getAgentsVector(agents);
+        std::vector<Agent> copy = get_agents_vector(agents);
         
         // Output drawable agent data.
         for (auto agent : copy) {
@@ -932,7 +932,7 @@ void simulate_for_dijkstra() {
     std::shared_ptr<Node> curr_node;
     std::shared_ptr<Edge> next_edge;
     
-    theCity->get_safety_over_time().clear();
+    theCity->clear_safety_over_time();
     
     std::priority_queue<Agent, std::deque<Agent>, Agent::cmpSoonest> agents_copy = theCity->get_agents();
     if (agents_copy.size() == 0) {
@@ -944,7 +944,7 @@ void simulate_for_dijkstra() {
     while (curr_time < theCity->sim_time()) {
         if (next_time - curr_time <= 0.0) {
             next_time += epoch;
-            theCity->get_safety_over_time().push_back(getSumSafety(agents_copy) / agents_copy.size());
+            theCity->append_safety_over_time(get_sum_safety_queue(agents_copy) / agents_copy.size());
         }
         // Get and remove the next agent to be processed from the priority queue
         curr_agent = agents_copy.top();
@@ -965,7 +965,7 @@ void simulate_for_dijkstra() {
         curr_agent.add_to_route(curr_node->get_id());
         
         // Select next edge the agent will travel on, according to dijkstra's algorithm
-        next_edge = getNextEdge(curr_node);
+        next_edge = get_dijkstra_next_edge(curr_node);
         
         //////////////////////////////////////
         std::map<std::shared_ptr<Edge>, float> prob_copy = curr_node->get_prob();
@@ -978,7 +978,7 @@ void simulate_for_dijkstra() {
         //////////////////////////////////////
         
         // Traffic is backed up - set agent to wait and continue.
-        if (next_edge == NULL) {
+        if (next_edge == nullptr) {
             float wait_time = curr_node->get_wait_time();
             
             curr_agent.inc_transit_time(wait_time);
@@ -986,7 +986,7 @@ void simulate_for_dijkstra() {
             agents_copy.push(curr_agent);
         } else {
             // Remove counter from edge agent is leaving
-            if (curr_agent.get_edge() != NULL) {
+            if (curr_agent.get_edge() != nullptr) {
                 curr_agent.get_edge()->dec_c(curr_agent.get_member_count());
             }
             
@@ -1031,8 +1031,8 @@ void simulate_for_dijkstra() {
         }
     }
     // Calculate the sum of safety across all agents
-    float total_safety = getSumSafety(agents_copy);
-    theCity->get_safety_over_time().push_back(total_safety / agents_copy.size());
+    float total_safety = get_sum_safety_queue(agents_copy);
+    theCity->append_safety_over_time(total_safety / agents_copy.size());
     printf("safety_over_time: %f\n", total_safety / agents_copy.size());
     
     ///////////////////////////////////////////////////////
@@ -1070,7 +1070,7 @@ void simulate_for_dijkstra() {
         printf("Node: %d totalValue: %f\n", iterator->first->get_id(), iterator->second);
     }*/
     
-    outputDrawable(agents_copy);
+    output_drawable_dijkstra(agents_copy);
     ///////////////////////////////////////////////////////
 }
 

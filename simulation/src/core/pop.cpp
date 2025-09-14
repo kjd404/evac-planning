@@ -9,17 +9,15 @@ Population::Population(int p_size) {
   this->pop_size = p_size;
 }
 
-std::pair<float, Chromosome> Population::get_best() {
-  // std::multimap<float, Chromosome, std::less<float> >::iterator iter =
-  // this->population.begin();
-  std::multimap<float, Chromosome, std::greater<float> >::iterator iter =
-    this->population.begin();
+std::pair<float, Chromosome> Population::get_best() const {
+  // take the first element (greatest fitness) from the multimap
+  auto iter = this->population.begin();
   std::pair<float, Chromosome> best_pair(iter->first, iter->second);
 
   return best_pair;
 }
 
-void Population::print_population() {
+void Population::print_population() const {
   for (auto iter = this->population.begin();
        iter != this->population.end(); iter++) {
     printf("Fit: %f\n", iter->first);
@@ -27,13 +25,13 @@ void Population::print_population() {
   }
 }
 
-std::vector<Chromosome> Population::vector_best() {
+std::vector<Chromosome> Population::vector_best() const {
   std::vector<Chromosome> c_vec;
   c_vec.push_back(this->get_best().second);
   return c_vec;
 }
 
-std::vector<Chromosome> Population::get_vector() {
+std::vector<Chromosome> Population::get_vector() const {
   std::vector<Chromosome> c_vec;
 
   for (auto iter = this->population.begin();
@@ -45,7 +43,7 @@ std::vector<Chromosome> Population::get_vector() {
 }
 
 void Population::add_chromosome(float f, Chromosome ind) {
-  this->population.insert(std::pair<float, Chromosome>(f, ind));
+  this->population.emplace(f, ind);
 }
 
 std::pair<float, Chromosome> Population::select_at(int index) {
@@ -131,10 +129,10 @@ void Population::insert(int tourney_size,
     this->population.find(pop_copy[fit_index].first);
   this->population.erase(it);
 
-  this->population.insert(new_ind);
+  this->population.emplace(new_ind.first, new_ind.second);
 }
 
-void Population::print_fitnesses() {
+void Population::print_fitnesses() const {
   for (auto iter = this->population.begin();
        iter != this->population.end(); iter++) {
     printf("%f\n", iter->first);

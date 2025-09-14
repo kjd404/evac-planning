@@ -49,6 +49,10 @@ class Node {
   void set_latitude(float l) { latitude = l; }
 
   void init_probs();
+  // Note: set_probs assumes the iteration order of 'prob' map is stable and
+  // consistent with producers/consumers. Because std::map orders by key
+  // (here, shared_ptr<Edge>), this effectively depends on pointer ordering.
+  // Keeping generator/consumer iteration aligned preserves behavior.
   void set_probs(std::vector<float>);
 
   // Checks if this node is connected to nodeID.

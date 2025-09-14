@@ -43,7 +43,7 @@ City::City(std::string name, int num_nodes = 0, int degree = 0) {
  * so is error prone, as a result of user-defined comparison operators and
  * the potential destruction of the order of the data structure. 
  */
-std::vector<Agent> City::get_agent_vector() {
+std::vector<Agent> City::get_agent_vector() const {
   // Copy the agents priority queue.
   std::priority_queue<Agent, std::deque<Agent>, Agent::cmpSoonest> agents_copy;
   agents_copy = this->agents;
@@ -162,7 +162,7 @@ void City::set_agents(int agent_set) {
     for (int j = 0; j < 10; j++) {
       // Create a new agent at the indicated node (i)
       Agent new_agent = Agent(num_ind, agent_start_time, nodes.at(i),
-			      nodes.at(i), NULL);
+			      nodes.at(i), nullptr);
       agents.push(new_agent);
     }
   }
@@ -393,7 +393,7 @@ float City::simulate() {
       selectedEdge->inc_c(currAgent.get_member_count());
 
       // Decrement
-      if (currAgent.get_edge() != NULL) {
+      if (currAgent.get_edge() != nullptr) {
 	currAgent.get_edge()->dec_c(currAgent.get_member_count());
       }
 
@@ -412,14 +412,14 @@ float City::simulate() {
       // Select the edge the agent will move to.
       selectedEdge = get_next_edge(currNode);
 
-      if (selectedEdge == NULL) {
+      if (selectedEdge == nullptr) {
 	printf("An edge selected during simulation was a null edge. Exiting...\n");
 	exit(0);
       }
 
       printf("Time to travel edge for this agent: %f\n", selectedEdge->time());
 
-      if (currAgent.get_edge() != NULL) {
+      if (currAgent.get_edge() != nullptr) {
 	// Remove counter from current edge; agent is leaving the edge.
 	currAgent.get_edge()->dec_c(currAgent.get_member_count());
       }
@@ -528,7 +528,7 @@ float City::simulate_for_safety() {
     next_edge = get_next_edge(curr_node);
 
     // Traffic is backed up - set agent to wait and continue.
-    if (next_edge == NULL) {
+    if (next_edge == nullptr) {
       float wait_time = curr_node->get_wait_time();
 
       curr_agent.inc_transit_time(wait_time);
@@ -536,7 +536,7 @@ float City::simulate_for_safety() {
       agents.push(curr_agent);
     } else {
       // Remove counter from edge agent is leaving
-      if (curr_agent.get_edge() != NULL) {
+      if (curr_agent.get_edge() != nullptr) {
 	curr_agent.get_edge()->dec_c(curr_agent.get_member_count());
       }
 
@@ -631,10 +631,10 @@ std::vector<std::vector<int> > City::get_route_set() {
 std::shared_ptr<Edge> City::get_next_edge(std::shared_ptr<Node> n) {
   // Get the probabilities map from the given node, n.
   std::map<std::shared_ptr<Edge>, float> m = n->get_prob();
-  std::shared_ptr<Edge> ret_edge = NULL;
+  std::shared_ptr<Edge> ret_edge = nullptr;
 
   // get a random value.
-  float rand_val = static_cast<float>(randMod(100))/100.0;
+  float rand_val = static_cast<float>(randUnit());
   float sum_prob = 0.0;
 
   // This loop iterates over edges/probabilities.
@@ -645,7 +645,7 @@ std::shared_ptr<Edge> City::get_next_edge(std::shared_ptr<Node> n) {
     // Accounting for null edges (ones that don't exist...)
     // Select the appropriate edge, probabilistically...
     if (rand_val < sum_prob) {
-      if (iterator->first == NULL) {
+      if (iterator->first == nullptr) {
 	printf("Setting the ret_edge in get_next_edge...but it's null?\n");
       } else if (!(iterator->first->get_c() >= iterator->first->get_cmax())) {
 	ret_edge = iterator->first;
@@ -778,7 +778,7 @@ void City::write_slang(Parameters params, char *file) {
   FILE *out;
   out = fopen(filename.c_str(), "w");
 
-  fprintf(out, "city %s %lu %d\n", this->name.c_str(),
+  fprintf(out, "city %s %zu %d\n", this->name.c_str(),
 	   this->nodes.size(), this->degree);
 
   // output parameters to file
@@ -850,7 +850,7 @@ void City::add_agents(int node_id, int num_agents, int num_ind) {
     for (int i = 0; i < num_agents; i++) {
       int start_node = randMod(this->nodes.size());
       Agent a = Agent(num_ind, 0.0, nodes.at(start_node),
-		       nodes.at(start_node), NULL);
+		       nodes.at(start_node), nullptr);
       a.set_id(init_agents.size());
       init_agents.push_back(a);
       agents.push(a);
@@ -858,7 +858,7 @@ void City::add_agents(int node_id, int num_agents, int num_ind) {
   } else if (node_id < num_nodes && node_id >= 0) {
     for (int i = 0; i < num_agents; i++) {
       Agent a = Agent(num_ind, 0.0, nodes.at(node_id),
-		      nodes.at(node_id), NULL);
+		      nodes.at(node_id), nullptr);
       a.set_id(init_agents.size());
       init_agents.push_back(a);
       agents.push(a);

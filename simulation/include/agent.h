@@ -47,8 +47,8 @@ class Agent {
   float get_final_time() const { return this->final_time; }
   float get_curr_safety() const;
   int get_member_count() const { return num_members; }
-  std::vector<int> get_route() const { return this->route; }
-  std::vector<float> get_route_times() const { return this->route_times; }
+  const std::vector<int>& get_route() const { return this->route; }
+  const std::vector<float>& get_route_times() const { return this->route_times; }
   std::vector<int> get_collapsed_route();
 
   // Printers

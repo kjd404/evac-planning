@@ -23,7 +23,7 @@ std::shared_ptr<Edge> Node::get_self_edge() {
     }
   }
 
-  return NULL;
+  return nullptr;
 }
 
 // Returns a vector if nodeIDs, corresponding to this node's neighbor nodes.

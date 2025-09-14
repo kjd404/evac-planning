@@ -6,7 +6,7 @@
  * Reports errors.
  */
 void lexerr(char *s) {
-  if (s != NULL) {
+  if (s != nullptr) {
     fprintf(stderr, "%s\n", s);
   } else {
     fprintf(stderr, "POINTER ERROR. TERMINATING...\n");
@@ -81,7 +81,7 @@ struct treeNode * alcNode(int cat, char *ruleName, int nChilds, ...) {
 
 int getIntegerValue(char *theStr) {
   int theInt = -100;
-  if (theStr != NULL) {
+  if (theStr != nullptr) {
     theInt = atoi(theStr);
   }
 
@@ -90,7 +90,7 @@ int getIntegerValue(char *theStr) {
 
 float getFloatValue(char *theStr) {
   float theFloat = -100.;
-  if (theStr != NULL) {
+  if (theStr != nullptr) {
     theFloat = atof(theStr);
   }
 

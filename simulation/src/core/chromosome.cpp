@@ -2,8 +2,6 @@
 #include <vector>
 #include "chromosome.h"
 
-#define MUTATION_AMT .05
-
 Chromosome::Chromosome(std::vector<std::vector<float> > data) {
   this->data = data;
 }
@@ -104,7 +102,7 @@ Chromosome Chromosome::cross(Chromosome other) {
   return child;
 }
 
-void Chromosome::print_chromosome() {
+void Chromosome::print_chromosome() const {
   for (auto v : data) {
     for (auto f : v) {
       printf("%f ", f);
